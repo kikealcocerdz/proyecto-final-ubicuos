@@ -3,51 +3,28 @@ const { createServer } = require('http');
 const { join } = require('path');
 const { Server } = require('socket.io');
 
-const appChat = express();
-const appIndex = express();
+const app = express();
+const server = createServer(app);
+const io = new Server(server);
 
-const chatServer = createServer(appChat);
-const indexServer = createServer(appIndex);
+// Servir tanto index.html como server.html desde la misma ruta
+app.use(express.static(join(__dirname, '')));
 
-const ioChat = new Server(chatServer);
-const ioIndex = new Server(indexServer);
+// Escuchar conexiones de Socket.IO
+io.on('connection', (socket) => {
+  console.log('a user connected');
 
-// Servir el archivo index.html en el puerto 3000
-appChat.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
-});
-
-// Servir el archivo server.html en el puerto 3001
-appIndex.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'server.html'));
-});
-
-ioChat.on('connection', (chatSocket) => {
-  console.log('a user connected to chat');
-
-  chatSocket.on('disconnect', () => {
-    console.log('user disconnected from chat');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
   });
 
   // Escuchar los mensajes del chat y retransmitirlos a todos los clientes conectados
-  chatSocket.on('chat message', (msg) => {
+  socket.on('chat message', (msg) => {
     console.log('message: ' + msg);
-    ioChat.emit('chat message', msg); // Emite el mensaje a todos los clientes conectados en el servidor chat
+    io.emit('chat message', msg); // Emite el mensaje a todos los clientes conectados
   });
 });
 
-ioIndex.on('connection', (indexSocket) => {
-  console.log('a user connected to index');
-
-  indexSocket.on('disconnect', () => {
-    console.log('user disconnected from index');
-  });
-});
-
-indexServer.listen(3000, () => {
-  console.log('Chat server running at http://localhost:3000');
-});
-
-chatServer.listen(3001, () => {
-  console.log('Index server running at http://localhost:3001');
+server.listen(3000, () => {
+  console.log('Server running at http://localhost:3000');
 });

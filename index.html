@@ -21,20 +21,45 @@
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
     </form>
-  </body>
-  <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-  
-    const form = document.getElementById('form');
-    const input = document.getElementById('input');
-  
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (input.value) {
-        socket.emit('chat message', input.value);
-        input.value = '';
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io(); // Conecta al mismo servidor que el archivo server.html
+
+      const form = document.getElementById('form');
+      const input = document.getElementById('input');
+    
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
+
+      // Función para agregar un nuevo mensaje al interfaz de chat
+      function addMessage(msg) {
+        console.log("Mensaje recibido: ", msg); // Mensaje de depuración: muestra el mensaje recibido en la consola
+        var item = document.createElement('li');
+        item.textContent = msg;
+        document.getElementById('messages').appendChild(item);
+        console.log("Mensaje agregado a la lista: ", msg); // Mensaje de depuración: indica que el mensaje se agregó a la lista
+        window.scrollTo(0, document.body.scrollHeight);
       }
-    });
-  </script>
+
+      // Escuchar eventos de 'chat message' desde el servidor y mostrar mensajes
+      socket.on('chat message', function(msg) {
+        console.log("Evento 'chat message' recibido: ", msg); // Mensaje de depuración: muestra el mensaje de evento en la consola
+        addMessage(msg);
+      });
+
+      // Función para escanear e imprimir mensajes
+      function scanMessages() {
+        var messages = document.getElementById('messages').getElementsByTagName('li');
+        console.log("Escaneando mensajes...");
+        for (var i = 0; i < messages.length; i++) {
+          console.log(messages[i].textContent);
+        }
+      }
+    </script>
+  </body>
 </html>
