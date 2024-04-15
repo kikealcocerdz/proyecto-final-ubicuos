@@ -1,22 +1,40 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Socket.IO chat</title>
-    <style>
-      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-
-      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
-      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
-      #input:focus { outline: none; }
-      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
-
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages > li { padding: 0.5rem 1rem; }
-      #messages > li:nth-child(odd) { background: #efefef; }
-    </style>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>easySHOP</title>
+    <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
+    <header>
+      <a href="/" class="shop-title">easySHOP</a>
+    </header>
+    <section class="shop-container">
+      <h3>LISTA ACTUAL</h3>
+      <div class="lista-container">
+        <div class="item-lista">
+          <img src="https://via.placeholder.com/100" alt="Producto 1" />
+          <p>Producto 1</p>
+        </div>
+        <div class="item-lista">
+          <img src="https://via.placeholder.com/100" alt="Producto 1" />
+          <p>Producto 1</p>
+        </div>
+        <div class="item-lista">
+          <img src="https://via.placeholder.com/100" alt="Producto 1" />
+          <p>Producto 1</p>
+        </div>
+        <div class="item-lista">
+          <img src="https://via.placeholder.com/100" alt="Producto 1" />
+          <p>Producto 1</p>
+        </div>
+        <div class="item-lista">
+          <img src="https://via.placeholder.com/100" alt="Producto 1" />
+          <p>Producto 1</p>
+        </div>
+      </div>
+      <a href="/useractive.html" class="link-nextstep">EMPEZAR COMPRA</a>
+    </section>
     <ul id="messages"></ul>
     <form id="form" action="">
       <input id="input" autocomplete="off" /><button>Send</button>
@@ -25,40 +43,58 @@
     <script>
       const socket = io(); // Conecta al mismo servidor que el archivo server.html
 
-      const form = document.getElementById('form');
-      const input = document.getElementById('input');
-    
-      form.addEventListener('submit', (e) => {
+      const form = document.getElementById("form");
+      const input = document.getElementById("input");
+
+      form.addEventListener("submit", (e) => {
         e.preventDefault();
         if (input.value) {
-          socket.emit('chat message', input.value);
-          input.value = '';
+          socket.emit("chat message", input.value);
+          input.value = "";
         }
       });
 
       // Función para agregar un nuevo mensaje al interfaz de chat
       function addMessage(msg) {
         console.log("Mensaje recibido: ", msg); // Mensaje de depuración: muestra el mensaje recibido en la consola
-        var item = document.createElement('li');
+        var item = document.createElement("li");
         item.textContent = msg;
-        document.getElementById('messages').appendChild(item);
+        document.getElementById("messages").appendChild(item);
         console.log("Mensaje agregado a la lista: ", msg); // Mensaje de depuración: indica que el mensaje se agregó a la lista
         window.scrollTo(0, document.body.scrollHeight);
       }
 
       // Escuchar eventos de 'chat message' desde el servidor y mostrar mensajes
-      socket.on('chat message', function(msg) {
+      socket.on("chat message", function (msg) {
         console.log("Evento 'chat message' recibido: ", msg); // Mensaje de depuración: muestra el mensaje de evento en la consola
         addMessage(msg);
       });
 
       // Función para escanear e imprimir mensajes
       function scanMessages() {
-        var messages = document.getElementById('messages').getElementsByTagName('li');
+        var messages = document
+          .getElementById("messages")
+          .getElementsByTagName("li");
         console.log("Escaneando mensajes...");
         for (var i = 0; i < messages.length; i++) {
           console.log(messages[i].textContent);
         }
+      }
+
+      // Función para iniciar el dictado de voz
+      function startDictation() {
+        var recognition = new webkitSpeechRecognition() || SpeechRecognition();
+        recognition.lang = "es-ES";
+        recognition.start();
+        recognition.onresult = function (event) {
+          if (event.results.length > 0) {
+            var result = event.results[0];
+            if (result.isFinal) {
+              var transcript = result[0].transcript;
+              input.value = transcript;
+            }
+          }
+        };
       }
     </script>
   </body>
