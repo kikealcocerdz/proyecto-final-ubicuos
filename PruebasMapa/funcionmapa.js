@@ -64,5 +64,72 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     }
 }
 
+// Obtener el botón y el área de transcripción del DOM
+const startButton = document.getElementById('startButton');
+const transcriptionDiv = document.getElementById('transcription');
+
+let textoAñadido = ""; // Variable para almacenar el texto añadido
+
+// Verificar si el navegador soporta la API de reconocimiento de voz
+if ('webkitSpeechRecognition' in window) {
+  // Crear un nuevo objeto de reconocimiento de voz
+  const recognition = new webkitSpeechRecognition();
+
+  // Configurar opciones del reconocimiento
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'es-ES'; // Idioma español 
+
+  // Cuando se detecta un resultado parcial
+  recognition.onresult = function(event) {
+    let interimTranscript = "";
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        const finalTranscript = event.results[i][0].transcript;
+        // Verificar si el texto contiene la palabra "añadir"
+        if (finalTranscript.toLowerCase().includes("añadir")) {
+          // Obtener el texto después de la palabra "añadir"
+          textoAñadido = finalTranscript.substring(finalTranscript.indexOf("añadir") + 6, finalTranscript.indexOf("añadir") + 12).trim();
+          console.log("Texto añadido:", textoAñadido);
+
+        }
+        interimTranscript += finalTranscript;
+      } else {
+        interimTranscript += event.results[i][0].transcript;
+      }
+    }
+    transcriptionDiv.innerHTML = interimTranscript;
+  };
+
+  // Cuando se detiene el reconocimiento
+  recognition.onend = function() {
+    console.log('Reconocimiento de voz detenido.');
+  };
+
+  // Cuando ocurre un error
+  recognition.onerror = function(event) {
+    console.error('Error en el reconocimiento de voz:', event.error);
+  };
+  var empezar = false;
+  // Cuando se presiona el botón de inicio
+  startButton.addEventListener('click', function() {
+    // Comenzar el reconocimiento
+    if (empezar == false){
+        recognition.start();
+        empezar = true;
+        startButton.textContent = 'Escuchando...';
+    }
+    else{
+        recognition.stop();
+        empezar = false;
+        startButton.textContent = 'Iniciar';
+    }
+  });
+} else {
+  // Si el navegador no soporta la API de reconocimiento de voz
+  console.error('El navegador no soporta la API de reconocimiento de voz.');
+  startButton.disabled = true;
+  startButton.textContent = 'No soportado';
+}
 
 
