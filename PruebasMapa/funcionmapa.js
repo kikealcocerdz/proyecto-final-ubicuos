@@ -1,4 +1,5 @@
 var orient = 0;
+var cercanos = 0;
 if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     window.addEventListener('deviceorientation', handleOrientation);
     window.addEventListener('devicemotion', handleMotion);
@@ -34,11 +35,13 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 
     function handleMotion(event) {
         var arrow = document.getElementById('arrow');
-        var accelerationX = event.accelerationIncludingGravity.x;
-       
+        var accelerationX = Math.abs(event.acceleration.x);
 
-        // Velocidad de movimiento en píxeles por segundo
-        var speed = 10;
+        var compass = document.getElementById('compass');
+        compass.innerHTML = 'Aceleración en x: ' + accelerationX;   
+
+        // Velocidad de movimiento en píxeles por segundoS
+        var speed = 0.1;
 
         // Calcula el cambio en la posición de la flecha
         var deltaX = accelerationX * speed;
@@ -50,17 +53,64 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 
         // Calcula la nueva posición de la flecha
         if (orient ==0){
-        var newX = currentX + deltaX;}
+        var newX = currentY + deltaY;}
         else if (orient ==1){
         var newX = currentX - deltaX;}
         else if (orient ==2){
-        var newX = currentX - deltaX;}
+        var newX = currentY - deltaY;}
         else{
         var newX = currentX + deltaX;}
 
         // Aplica la nueva posición a la flecha
         arrow.style.left = newX + 'px';
         arrow.style.top = newY + 'px';
+
+        //Controla en que parte del mapa esta la flecha para mostrar los cercanos
+        if (newX > 100){
+            if (newY > 100){
+                cercanos = 1;}
+            else{
+                cercanos = 2;}}
+        else{
+            if (newY > 100){
+                cercanos = 3;}
+            else{
+                cercanos = 4;
+            }}
+       
+    
+    //Funcion para mostrar los cercanos
+    var fotomapa = 0;
+    if newX > 100 && newY > 100{
+        fotomapa =1;}
+    else if newX < 100 && newY > 100{
+        fotomapa =2;}
+    else if newX < 100 && newY < 100{
+        fotomapa =3;}
+    else if newX > 100 && newY < 100{
+        fotomapa =4;}
+    else{
+        fotomapa = 0;
+    }
+}
+
+    function IntercativeMap(){
+        
+        var map = document.getElementById('map');
+        if (fotomapa == 0){
+            map.src = "mapa/mapa1.png";}
+        else if (fotomapa == 1){
+            map.src = "mapa/mapa2.png";}
+        else if (fotomapa == 2){
+            map.src = "mapa/mapa3.png";}
+        else if(fotomapa == 3){
+            map.src = "mapa/mapa4.png";}
+        else if (fotomapa == 4){
+            map.src = "mapa/mapa5.png";}
+        else if (fotomapa == 5){
+            map.src = "mapa/mapa6.png";}
+        else {map.src = "mapa/mapaoriginal.png";}
+        
     }
 }
 
