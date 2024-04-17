@@ -38,7 +38,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
         var accelerationX = Math.abs(event.acceleration.x);
 
         var compass = document.getElementById('compass');
-        compass.innerHTML = 'Aceleración en x: ' + accelerationX;   
+        compass.innerHTML = 'Aceleración en x: ' + accelerationX + 'newX: ' + newX + 'newY: ' + newY;   
 
         // Velocidad de movimiento en píxeles por segundoS
         var speed = 0.1;
@@ -81,22 +81,40 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     
     //Funcion para mostrar los cercanos
     var fotomapa = 0;
-    if newX > 100 && newY > 100{
+    if (newX > 100 && newY > 100){
         fotomapa =1;}
-    else if newX < 100 && newY > 100{
+    else if (newX < 100 && newY > 100){
         fotomapa =2;}
-    else if newX < 100 && newY < 100{
+    else if (newX < 100 && newY < 100){
         fotomapa =3;}
-    else if newX > 100 && newY < 100{
+    else if (newX > 100 && newY < 100){
         fotomapa =4;}
     else{
         fotomapa = 0;
     }
+    var map = document.getElementById('image');
+        
+        if (fotomapa == 0){
+            map.src = "mapa/mapa1.png";}
+        else if (fotomapa == 1){
+            map.src = "mapa/mapa2.png";}
+        else if (fotomapa == 2){
+            map.src = "mapa/mapa3.png";}
+        else if(fotomapa == 3){
+            map.src = "mapa/mapa4.png";}
+        else if (fotomapa == 4){
+            map.src = "mapa/mapa5.png";}
+        else if (fotomapa == 5){
+            map.src = "mapa/mapa6.png";}
+        else {map.src = "mapa/mapaoriginal.png";}
+        
+    IntercativeMap();
 }
 
     function IntercativeMap(){
         
-        var map = document.getElementById('map');
+        var map = document.getElementById('image');
+        
         if (fotomapa == 0){
             map.src = "mapa/mapa1.png";}
         else if (fotomapa == 1){
