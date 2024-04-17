@@ -79,7 +79,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
             }}
        
     
-    //Funcion para mostrar los cercanos
+    //Funcion para mostrar el mapa con progreso
     var fotomapa = 0;
     if (newX > 100 && newY > 100){
         fotomapa =1;}
@@ -92,6 +92,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     else{
         fotomapa = 0;
     }
+
     var map = document.getElementById('image');
         
         if (fotomapa == 0){
@@ -108,28 +109,9 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
             map.src = "mapa/mapa6.png";}
         else {map.src = "mapa/mapaoriginal.png";}
         
-    IntercativeMap();
+    
 }
 
-    function IntercativeMap(){
-        
-        var map = document.getElementById('image');
-        
-        if (fotomapa == 0){
-            map.src = "mapa/mapa1.png";}
-        else if (fotomapa == 1){
-            map.src = "mapa/mapa2.png";}
-        else if (fotomapa == 2){
-            map.src = "mapa/mapa3.png";}
-        else if(fotomapa == 3){
-            map.src = "mapa/mapa4.png";}
-        else if (fotomapa == 4){
-            map.src = "mapa/mapa5.png";}
-        else if (fotomapa == 5){
-            map.src = "mapa/mapa6.png";}
-        else {map.src = "mapa/mapaoriginal.png";}
-        
-    }
 }
 
 // Obtener el botón y el área de transcripción del DOM
@@ -199,5 +181,39 @@ if ('webkitSpeechRecognition' in window) {
   startButton.disabled = true;
   startButton.textContent = 'No soportado';
 }
+
+const progresImage = (value) => {
+
+    const imageContainer = document.querySelector("#image-container");
+    const tasksfinished = document.querySelector("#finish-container");
+    tasksfinished.innerHTML = "";
+    let imageUrl = "";
+    let value=0;
+    for (let element of carrito) {
+        value+=element.valornutricional;
+    }
+    //Definimos el valor de la variable value
+    if (carrito.length>0)
+    {value=value/carrito.length;}
+    else {value=0;}
+  
+    // Dependiendo del valor de la variable, selecciona la imagen correspondiente
+    if (taskList.length === 0) {
+      imageUrl = "";
+  }else if (value === 0) {
+      imageUrl = "mapa/fase5.png";
+    }else if (value > 0 && value <= 0.25) {
+      imageUrl = "mapa/fase4.png";
+    } else if (value > 0.25 && value <= 0.66) {
+      imageUrl = "mapa/fase3.png";
+    } else if (value > 0.66 && value < 1) {
+      imageUrl = "mapa/fase2.png";
+    } else if (value == 1) {
+      imageUrl = "mapa/fase1.png";
+    }
+  
+    // Rellena el div con la imagen seleccionada
+    imageContainer.innerHTML = `<img src="${imageUrl}" alt="ImagenValorNutricional">`;
+  };
 
 
