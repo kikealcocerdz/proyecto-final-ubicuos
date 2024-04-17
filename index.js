@@ -7,24 +7,69 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 
-// Servir tanto index.html como server.html desde la misma ruta
+// Servir tanto index.html como useractive.html desde la misma ruta
 app.use(express.static(join(__dirname, '')));
 
-// Escuchar conexiones de Socket.IO
+// Array para almacenar la lista de productos
+let productList = [];
+let productListAdded = [];
+
+// Endpoint GET para obtener la lista de productos
+app.get('/product-list', (req, res) => {
+  res.json(productList);
+});
+
+app.get('/product-list-added', (req, res) => {
+  res.json(productList);
+});
+
+
+// Emitir la lista actual de productos a cualquier usuario que se conecte
 io.on('connection', (socket) => {
   console.log('a user connected');
+  io.emit('product list', productList); // Enviar la lista de productos al cliente recién conectado
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
 
-  // Escuchar los mensajes del chat y retransmitirlos a todos los clientes conectados
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-    io.emit('chat message', msg); // Emite el mensaje a todos los clientes conectados
+  // Escuchar cuando se añada un nuevo producto y actualizar la lista
+  socket.on('product added', (productName) => {
+    productList.push(productName);
+    console.log('Current product list:', productList);
+    io.emit('product list', productList); // Emite la lista de productos a todos los clientes conectados
   });
+
+  socket.on('product added voice', (productName) => {
+    productListAdded.push(productName);
+    console.log('Current product list:', productListAdded);
+    io.emit('product list added', productListAdded); // Emite la lista de productos a todos los clientes conectados
+  }
+  );
 });
 
+// Manejar la conexión de usuario a /useractive.html
+app.get('/useractive.html', (req, res) => {
+  // Emitir el evento cuando el usuario se conecta a /useractive.html
+  io.emit('user connected');
+  // Emitir la lista actual de productos al usuario que se conecta
+  io.emit('product list', productList);
+  // Responder con el archivo useractive.html
+  res.sendFile(join(__dirname, 'useractive.html'));
+});
+
+app.get('/cart.html', (req, res) => {
+  // Emitir el evento cuando el usuario se conecta a /useractive.html
+  io.emit('user connected');
+  // Emitir la lista actual de productos al usuario que se conecta
+  io.emit('product list added', productListAdded);
+  // Responder con el archivo useractive.html
+  res.sendFile(join(__dirname, 'cart.html'));
+}
+);
+
+
+// Escuchar conexiones de Socket.IO
 server.listen(3000, () => {
   console.log('Server running at http://localhost:3000');
 });

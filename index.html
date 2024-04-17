@@ -11,28 +11,13 @@
     </header>
     <section class="shop-container">
       <h3 style="color: white">LISTA ACTUAL</h3>
-      <div class="lista-container">
-        <div class="item-lista">
-          <img src="https://via.placeholder.com/100" alt="Producto 1" />
-          <p>Producto 1</p>
-        </div>
-        <div class="item-lista">
-          <img src="https://via.placeholder.com/100" alt="Producto 1" />
-          <p>Producto 1</p>
-        </div>
-        <div class="item-lista">
-          <img src="https://via.placeholder.com/100" alt="Producto 1" />
-          <p>Producto 1</p>
-        </div>
-        <div class="item-lista">
-          <img src="https://via.placeholder.com/100" alt="Producto 1" />
-          <p>Producto 1</p>
-        </div>
-        <div class="item-lista">
-          <img src="https://via.placeholder.com/100" alt="Producto 1" />
-          <p>Producto 1</p>
-        </div>
+      <div class="lista-container" id="product-list">
+        <!-- La lista de productos se agregará aquí -->
       </div>
+      <form id="list-form">
+        <input type="text" id="list-input" placeholder="Enter a product" />
+        <button type="submit" onclick="submitProduct(event)">AÑADIR</button>
+      </form>
       <a href="/useractive.html" class="link-nextstep">EMPEZAR COMPRA</a>
     </section>
     <ul id="messages"></ul>
@@ -43,45 +28,90 @@
     <script>
       const socket = io(); // Conecta al mismo servidor que el archivo server.html
 
-      const form = document.getElementById("form");
-      const input = document.getElementById("input");
+      const form = document.getElementById("list-form");
+      const input = document.getElementById("list-input");
+      const productListContainer = document.getElementById("product-list");
 
-      form.addEventListener("submit", (e) => {
-        e.preventDefault();
-        if (input.value) {
-          socket.emit("chat message", input.value);
+      // Función para agregar un producto a la lista en el cliente
+      function addProduct(productName) {
+        const item = document.createElement("div");
+        item.classList.add("item-lista");
+        const img = document.createElement("img");
+        img.alt = productName;
+        img.width = 100;
+        img.height = 100;
+        item.appendChild(img);
+        const p = document.createElement("p");
+        p.textContent = productName;
+        item.appendChild(p);
+        productListContainer.appendChild(item);
+
+        // Realizar búsqueda de imágenes en Google y establecer la primera imagen como imagen del producto
+        searchImage(productName)
+          .then((imageUrl) => {
+            if (imageUrl) {
+              img.src = imageUrl;
+            } else {
+              img.src = "https://via.placeholder.com/100"; // Si no se encuentra ninguna imagen, muestra un marcador de posición
+            }
+          })
+          .catch((error) => {
+            console.error("Error al buscar imagen:", error);
+            img.src = "https://via.placeholder.com/100"; // En caso de error, muestra un marcador de posición
+          });
+      }
+
+      // Función para realizar una búsqueda de imágenes en Google
+      async function searchImage(query) {
+        const apiKey = "AIzaSyAafRWOvQCkLrS8h0OIZBufu71PqVTBzEg";
+        const cxId = "d4b0870a6d6414dde";
+        const numResults = 1;
+
+        const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cxId}&q=${query}&num=${numResults}&searchType=image`;
+
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+          if (data.items && data.items.length > 0) {
+            return data.items[0].link;
+          } else {
+            return null;
+          }
+        } catch (error) {
+          console.error("Error al buscar imagen:", error);
+          return null;
+        }
+      }
+
+      // Enviar un mensaje al servidor cuando se envía el formulario
+      function submitProduct(event) {
+        event.preventDefault();
+        if (input.value.trim() !== "") {
+          const productName = input.value.trim();
+          addProduct(productName);
+          socket.emit("product added", productName);
           input.value = "";
         }
-      });
-
-      // Función para agregar un nuevo mensaje al interfaz de chat
-      function addMessage(msg) {
-        console.log("Mensaje recibido: ", msg); // Mensaje de depuración: muestra el mensaje recibido en la consola
-        var item = document.createElement("li");
-        item.textContent = msg;
-        document.getElementById("messages").appendChild(item);
-        console.log("Mensaje agregado a la lista: ", msg); // Mensaje de depuración: indica que el mensaje se agregó a la lista
-        window.scrollTo(0, document.body.scrollHeight);
       }
 
-      // Escuchar eventos de 'chat message' desde el servidor y mostrar mensajes
-      socket.on("chat message", function (msg) {
-        console.log("Evento 'chat message' recibido: ", msg); // Mensaje de depuración: muestra el mensaje de evento en la consola
-        addMessage(msg);
-      });
+      // Solicitar la lista de productos al servidor cuando se carga la página
+      window.onload = function () {
+        socket.emit("get product list");
+        console.log("Solicitando lista de productos al servidor...");
+        // Manejar la respuesta del servidor con la lista de productos
+        socket.on("product list", function (productList) {
+          console.log("Lista de productos recibida:", productList);
+          // Limpiar la lista actual de productos en el cliente
+          productListContainer.innerHTML = "";
+          // Agregar cada producto de la lista recibida al cliente
+          productList.forEach(function (productName) {
+            addProduct(productName);
+          });
+        });
+      };
 
-      // Función para escanear e imprimir mensajes
-      function scanMessages() {
-        var messages = document
-          .getElementById("messages")
-          .getElementsByTagName("li");
-        console.log("Escaneando mensajes...");
-        for (var i = 0; i < messages.length; i++) {
-          console.log(messages[i].textContent);
-        }
-      }
+      // Otras funciones de tu aplicación...
 
-      // Función para iniciar el dictado de voz
       function startDictation() {
         var recognition = new webkitSpeechRecognition() || SpeechRecognition();
         recognition.lang = "es-ES";

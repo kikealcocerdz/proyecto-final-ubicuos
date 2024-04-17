@@ -4,93 +4,28 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>easySHOP</title>
     <link rel="stylesheet" href="/style.css" />
+    <style>
+      /* Agrega estilos para el popup */
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid black;
+        display: none;
+      }
+    </style>
   </head>
-  <div class="popup">
-    <div class="popup-content">
-      <h4>Product Name</h4>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-      <p>$5.99 / lb</p>
-    </div>
-  </div>
   <body>
     <header>
       <a href="/" class="shop-title">easySHOP</a>
     </header>
     <section class="shop-container">
       <h3 style="color: white">LISTA ACTUAL</h3>
-      <div class="lista-container">
-        <div class="lista-placeholder">
-          <button class="favorite-button">
-            <img src="./public/star-unfilled.png" />
-          </button>
-          <button class="product-lista">
-            <img
-              class="product-image"
-              src="https://via.placeholder.com/100"
-              alt="Producto 1"
-            />
-            <div class="product-description">
-              <div class="product-price-container">
-                <p>Producto Name</p>
-              </div>
-              <div class="product-price-container">
-                <p>$5.99 / lb</p>
-                <p>$5.99</p>
-              </div>
-            </div>
-          </button>
-        </div>
-        <div class="lista-placeholder">
-          <button class="favorite-button">
-            <img src="./public/star-unfilled.png" />
-          </button>
-          <button class="product-lista">
-            <img
-              class="product-image"
-              src="https://via.placeholder.com/100"
-              alt="Producto 1"
-            />
-            <div class="product-description">
-              <div class="product-price-container">
-                <p>Producto Name</p>
-              </div>
-              <div class="product-price-container">
-                <p>$5.99 / lb</p>
-                <p>$5.99</p>
-              </div>
-            </div>
-          </button>
-        </div>
-      </div>
-      <h3 class="subheader-title">Productos restantes de la lista</h3>
-      <div class="left-products">
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 1" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 2" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 3" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 1" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 2" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 3" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 1" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 2" />
-        </div>
-        <div class="product">
-          <img src="https://via.placeholder.com/350" alt="Producto 3" />
-        </div>
+      <div class="lista-container" id="product-list">
+        <!-- La lista de productos se agregará aquí -->
       </div>
     </section>
     <footer>
@@ -104,30 +39,86 @@
       </div>
     </footer>
 
+    <!-- Agrega el popup -->
+    <div class="popup">
+      <div class="popup-content">
+        <h4>Product Name</h4>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+        <p>$5.99 / lb</p>
+      </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
     <script>
-      const product = document.querySelector(".product-image");
+      const socket = io(); // Conecta al mismo servidor que el archivo server.html
+
+      const productListContainer = document.getElementById("product-list");
       const popup = document.querySelector(".popup");
-      document.addEventListener("DOMContentLoaded", function () {
-        popup.style.display = "none";
-      });
-      document.addEventListener("touchend", function (event) {
-        if (event.target !== popup) {
-          popup.style.display = "none";
-        }
-      });
-      document.addEventListener("touchend", function (event) {
-        if (event.target === product) {
+
+      // Función para agregar un producto a la lista en el cliente
+      function addProduct(productName) {
+        const item = document.createElement("div");
+        item.classList.add("lista-placeholder");
+
+        const button = document.createElement("button");
+        button.classList.add("product-lista");
+        button.onclick = function () {
+          // Muestra el popup al hacer clic en un producto
           popup.style.display = "block";
-        }
-      });
+        };
+
+        const img = document.createElement("img");
+        img.classList.add("product-image");
+        img.src = "https://via.placeholder.com/100";
+        img.alt = productName;
+
+        const description = document.createElement("div");
+        description.classList.add("product-description");
+
+        const nameParagraph = document.createElement("p");
+        nameParagraph.textContent = productName;
+
+        const priceContainer = document.createElement("div");
+        priceContainer.classList.add("product-price-container");
+
+        const pricePerUnit = document.createElement("p");
+        pricePerUnit.textContent = "$5.99 / lb";
+
+        const totalPrice = document.createElement("p");
+        totalPrice.textContent = "$5.99";
+
+        priceContainer.appendChild(pricePerUnit);
+        priceContainer.appendChild(totalPrice);
+        description.appendChild(nameParagraph);
+        description.appendChild(priceContainer);
+
+        button.appendChild(img);
+        button.appendChild(description);
+        item.appendChild(button);
+
+        productListContainer.appendChild(item);
+      }
+
+      // Solicitar la lista de productos al servidor cuando se carga la página
+      window.onload = function () {
+        socket.emit("get product list added");
+        console.log("Solicitando lista de productos al servidor...");
+        // Manejar la respuesta del servidor con la lista de productos
+        socket.on("product list", function (productList) {
+          console.log("Lista de productos recibida:", productList);
+          // Limpiar la lista actual de productos en el cliente
+          productListContainer.innerHTML = "";
+          // Agregar cada producto de la lista recibida al cliente
+          productList.forEach(function (productName) {
+            addProduct(productName);
+          });
+        });
+      };
+
+      // Oculta el popup al hacer clic o tocar en cualquier parte fuera del mismo
       document.addEventListener("click", function (event) {
         if (event.target !== popup) {
           popup.style.display = "none";
-        }
-      });
-      document.addEventListener("click", function (event) {
-        if (event.target === product) {
-          popup.style.display = "block";
         }
       });
     </script>
