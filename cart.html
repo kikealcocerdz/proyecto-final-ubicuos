@@ -27,6 +27,9 @@
       <div class="lista-container" id="product-list">
         <!-- La lista de productos se agregará aquí -->
       </div>
+      <div class="lista-container" id="product-list-rest">
+        <!-- La lista de productos se agregará aquí -->
+      </div>
     </section>
     <footer>
       <div class="shop-actions">
@@ -53,6 +56,9 @@
       const socket = io(); // Conecta al mismo servidor que el archivo server.html
 
       const productListContainer = document.getElementById("product-list");
+      const productListContainerRest =
+        document.getElementById("product-list-rest");
+
       const popup = document.querySelector(".popup");
 
       // Función para agregar un producto a la lista en el cliente
@@ -99,6 +105,21 @@
         productListContainer.appendChild(item);
       }
 
+      function addProductRest(productName) {
+        const item = document.createElement("div");
+        item.classList.add("item-lista");
+        const img = document.createElement("img");
+        img.alt = productName.name;
+        img.src = productName.imageUrl;
+        img.width = 60;
+        img.height = 60;
+        item.appendChild(img);
+        const p = document.createElement("p");
+        p.textContent = productName.name;
+        item.appendChild(p);
+        productListContainerRest.appendChild(item);
+      }
+
       // Solicitar la lista de productos al servidor cuando se carga la página
       window.onload = function () {
         socket.emit("get product list added");
@@ -110,6 +131,16 @@
           productListContainer.innerHTML = "";
           // Agregar cada producto de la lista recibida al cliente
           productList.forEach(function (productName) {
+            console.log("Producto recibido:", productName);
+            addProductRest(productName);
+          });
+        });
+        socket.on("product list added", function (productListAdded) {
+          console.log("Lista de productos recibida:", productListAdded);
+          // Limpiar la lista actual de productos en el cliente
+          productListContainer.innerHTML = "";
+          // Agregar cada producto de la lista recibida al cliente
+          productListAdded.forEach(function (productName) {
             addProduct(productName);
           });
         });

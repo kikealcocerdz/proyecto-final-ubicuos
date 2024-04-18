@@ -31,9 +31,30 @@
       const form = document.getElementById("list-form");
       const input = document.getElementById("list-input");
       const productListContainer = document.getElementById("product-list");
+      // Función para agregar un producto a la lista en el cliente
+      // Enviar un mensaje al servidor cuando se envía el formulario
+      function submitProduct(event) {
+        event.preventDefault();
+        if (input.value.trim() !== "") {
+          const product = input.value.trim().toUpperCase();
+          const productContent = addProduct(product); // Llama a addProduct para obtener el objeto productContent
+          console.log("Añadiendo producto:", productContent);
+          socket.emit("product added", productContent); // Envía el objeto productContent al servidor
+          console.log("Enviando producto al servidor:", productContent);
+        }
+      }
 
       // Función para agregar un producto a la lista en el cliente
       function addProduct(productName) {
+        // Crear el objeto productContent
+        const productContent = {
+          name: productName,
+          imageUrl: "", // Esta será la URL de la imagen
+          price: "$5.99 / lb", // Puedes establecer el precio predeterminado o dejarlo vacío
+          totalPrice: "$5.99", // Puedes establecer el precio total predeterminado o dejarlo vacío
+        };
+
+        // Crear elementos HTML para el producto
         const item = document.createElement("div");
         item.classList.add("item-lista");
         const img = document.createElement("img");
@@ -42,7 +63,7 @@
         img.height = 100;
         item.appendChild(img);
         const p = document.createElement("p");
-        p.textContent = productName;
+        p.textContent = productName.name; // Mostrar el nombre del producto
         item.appendChild(p);
         productListContainer.appendChild(item);
 
@@ -51,6 +72,8 @@
           .then((imageUrl) => {
             if (imageUrl) {
               img.src = imageUrl;
+              // Actualizar el objeto productContent con la URL de la imagen
+              productContent.imageUrl = imageUrl;
             } else {
               img.src = "https://via.placeholder.com/100"; // Si no se encuentra ninguna imagen, muestra un marcador de posición
             }
@@ -59,6 +82,12 @@
             console.error("Error al buscar imagen:", error);
             img.src = "https://via.placeholder.com/100"; // En caso de error, muestra un marcador de posición
           });
+
+        // Limpiar el campo de entrada después de agregar el producto
+        input.value = "";
+
+        // Retornar el objeto productContent
+        return productContent;
       }
 
       // Función para realizar una búsqueda de imágenes en Google
@@ -80,17 +109,6 @@
         } catch (error) {
           console.error("Error al buscar imagen:", error);
           return null;
-        }
-      }
-
-      // Enviar un mensaje al servidor cuando se envía el formulario
-      function submitProduct(event) {
-        event.preventDefault();
-        if (input.value.trim() !== "") {
-          const productName = input.value.trim();
-          addProduct(productName);
-          socket.emit("product added", productName);
-          input.value = "";
         }
       }
 

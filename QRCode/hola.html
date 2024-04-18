@@ -1,16 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Código QR</title>
-  <link rel="stylesheet" href="stylesqr.css">
-</head>
-<body>
-  <button id="generateQR">Generar Código QR</button>
-  <div id="qrCode"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generador de Código QR</title>
+    <link rel="stylesheet" href="stylesqr.css" />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <header>
+      <a href="/" class="shop-title">easySHOP</a>
+    </header>
+    <section class="shop-container">
+      <button id="generateQR">Generar Código QR</button>
+      <div id="qrCode"></div>
+    </section>
+    <footer>
+      <div class="shop-actions">
+        <a href="cart.html" class="shop-action-button">
+          <img src="./public/list-icon.png" />
+        </a>
+        <a href="./QRCode/hola.html" class="shop-action-button">
+          <img src="./public/finish-icon.png" />
+        </a>
+      </div>
+    </footer>
 
-  <script src="qrcode.js"></script>
-  <script src="scriptqr.js"></script>
-</body>
+    <script src="qrcode.js"></script>
+    <script src="scriptqr.js"></script>
+  </body>
 </html>
