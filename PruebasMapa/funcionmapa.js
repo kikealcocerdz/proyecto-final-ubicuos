@@ -5,7 +5,7 @@ const diccionario = { 'abc12': 'Tomate', 'def34': 'Lechuga' }
 
 if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   window.addEventListener('deviceorientation', handleOrientation);
-  window.addEventListener('devicemotion', handleMotion);
+  window.addEventListener('deviceorientation', handleMotion);
 
   function handleOrientation(event) {
     var arrow = document.getElementById('arrow');
@@ -50,8 +50,8 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 
   function handleMotion(event) {
     var arrow = document.getElementById('arrow');
-    var accelerationX = Math.abs(event.acceleration.x);
-  
+    var accelerationX = 10;
+
 
     var compass = document.getElementById('compass');
     compass.innerHTML = 'Aceleración en x: ' + accelerationX + 'newX: ' + newX + 'newY: ' + newY;
@@ -106,19 +106,19 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 
     //Funcion para mostrar el mapa con progreso
     var fotomapa = 0;
-    if (newX > 470 && newx < 500 && newY > 575 && newY < 600) {
+    if (newX > 470 && newX < 500 && newY > 575 && newY < 600) {
       fotomapa = 1;
     }
-    else if (newX > 450 && newx < 480 && newY > 350 && newY < 380) {
+    else if (newX > 450 && newX < 480 && newY > 350 && newY < 380) {
       fotomapa = 2;
     }
-    else if (newX > 300 && newx < 340 && newY > 440 && newY < 480) {
+    else if (newX > 300 && newX < 340 && newY > 440 && newY < 480) {
       fotomapa = 3;
     }
-    else if (newX > 340 && newx < 380 && newY > 270 && newY < 310) {
+    else if (newX > 340 && newX < 380 && newY > 270 && newY < 310) {
       fotomapa = 4;
     }
-    else if (newX > 690 && newx < 730 && newY > 300 && newY < 340) {
+    else if (newX > 690 && newX < 730 && newY > 300 && newY < 340) {
       fotomapa = 5;
     }
 
