@@ -6,6 +6,9 @@ const diccionario = { 'abc12': 'Tomate', 'def34': 'Lechuga' }
 if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   window.addEventListener('deviceorientation', handleOrientation);
   window.addEventListener('deviceorientation', handleMotion);
+  //####################################################################################################################
+  //############################################# Flecha Del Mapa ######################################################
+  //####################################################################################################################
 
   function handleOrientation(event) {
     var arrow = document.getElementById('arrow');
@@ -85,8 +88,16 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     // Aplica la nueva posición a la flecha
     arrow.style.left = newX + 'px';
     arrow.style.top = newY + 'px';
+
+    //####################################################################################################################
+    //############################################# Fin Flecha Del Mapa ##################################################
+    //####################################################################################################################
+
+    //####################################################################################################################
+    //############################################# Mapa Interactivo######################################################
+    //####################################################################################################################
     
-    //Controla en que parte del mapa esta la flecha para mostrar los cercanos
+    //Controla en que parte del mapa esta la flecha para mostrar los cercanos,util para otra seccion del codigo
     if (currentX >= 470) {
       if (currentY >= 470) {//derecha abajo
         cercanos = 1;
@@ -103,6 +114,8 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
         cercanos = 4;//izquierda arriba
       }
     }
+    
+
 
     
     //Funcion para mostrar el mapa con progreso
@@ -122,7 +135,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     else if (currentX > 625 && currentX < 665 && currentY > 142 && currentY < 182) {
       fotomapa = 5;
     }
-
+    //Funcion para mostrar el mapa que corresponde depeniendo de la fase de compra del usuario
     var map = document.getElementById('image');
     console.log("El mapa actual es:",fotomapa);
     if (fotomapa == 0) {
@@ -153,9 +166,13 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     console.log("la posicion del puntero es:", currentX, currentY);
     console.log ("Cercanos:", cercanos);
   }
-
+  //####################################################################################################################
+  //############################################# Fin de Mapa Interactivo###############################################
+  //####################################################################################################################
 }
-
+//####################################################################################################################
+//############################################# SpeechAPI#############################################################
+//####################################################################################################################
 // Obtener el botón y el área de transcripción del DOM
 const startButton = document.getElementById('startButton');
 //const transcriptionDiv = document.getElementById('transcription');
@@ -231,7 +248,13 @@ if ('webkitSpeechRecognition' in window) {
   startButton.disabled = true;
   startButton.textContent = 'No soportado';
 }
+//####################################################################################################################
+//############################################# Fin SpeechAPI#########################################################
+//####################################################################################################################
 
+//####################################################################################################################
+//############################################# Barra Nutricional#####################################################
+//####################################################################################################################
 const diccionarioNutricional = { 'Tomate': 5, 'Leche': 3, 'Cereales': 1 }
 
 const progresImage = (value) => {
@@ -263,5 +286,8 @@ const progresImage = (value) => {
 
   // Rellena el div con la imagen seleccionada
   imageContainer.innerHTML = `<img src="${imageUrl}" alt="ImagenValorNutricional">`;
+//####################################################################################################################
+//############################################# Fin Barra Nutricional ################################################
+//####################################################################################################################
 };
 
