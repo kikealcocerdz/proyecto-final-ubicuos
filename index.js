@@ -55,7 +55,7 @@ app.get('/useractive.html', (req, res) => {
   // Emitir la lista actual de productos al usuario que se conecta
   io.emit('product list', productList);
   // Responder con el archivo useractive.html
-  res.sendFile(join(__dirname, 'useractive.html'));
+  res.sendFile(join(__dirname, './useractive/useractive.html'));
 });
 
 app.get('/cart.html', (req, res) => {
@@ -67,7 +67,7 @@ app.get('/cart.html', (req, res) => {
   io.to('cart').emit('product list added', productListAdded); // Cambio aquí
 
   // Responder con el archivo cart.html
-  res.sendFile(join(__dirname, 'cart.html'));
+  res.sendFile(join(__dirname, './cart/cart.html'));
 });
 
 

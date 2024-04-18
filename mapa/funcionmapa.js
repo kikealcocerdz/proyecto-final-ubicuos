@@ -68,6 +68,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 
 
     // Obtiene la posición actual de la flecha
+    console.log(window.getComputedStyle(arrow).left);
     var currentX = parseFloat(window.getComputedStyle(arrow).left);
     var currentY = parseFloat(window.getComputedStyle(arrow).top);
 
@@ -96,7 +97,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     //####################################################################################################################
     //############################################# Mapa Interactivo######################################################
     //####################################################################################################################
-    
+
     //Controla en que parte del mapa esta la flecha para mostrar los cercanos,util para otra seccion del codigo
     if (currentX >= 470) {
       if (currentY >= 470) {//derecha abajo
@@ -114,12 +115,12 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
         cercanos = 4;//izquierda arriba
       }
     }
-    
 
 
-    
+
+
     //Funcion para mostrar el mapa con progreso
-    
+
     if (currentX > 420 && currentX < 460 && currentY > 420 && currentY < 460) {
       fotomapa = 1;
     }
@@ -137,34 +138,34 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     }
     //Funcion para mostrar el mapa que corresponde depeniendo de la fase de compra del usuario
     var map = document.getElementById('image');
-    console.log("El mapa actual es:",fotomapa);
+    console.log("El mapa actual es:", fotomapa);
     if (fotomapa == 0) {
       console.log("Primer mapa");
-      map.src = "mapa/mapa1.png";
+      map.src = "./mapa/mapa-images/mapa1.png";
     }
     else if (fotomapa == 1) {
       console.log("Segundo mapa");
-      map.src = "mapa/mapa2.png";
+      map.src = "./mapa/mapa-images/mapa2.png";
     }
     else if (fotomapa == 2) {
       console.log("Tercer mapa");
-      map.src = "mapa/mapa3.png";
+      map.src = "./mapa/mapa-images/mapa3.png";
     }
     else if (fotomapa == 3) {
       console.log("Cuarto mapa");
-      map.src = "mapa/mapa4.png";
+      map.src = "./mapa/mapa-images/mapa4.png";
     }
     else if (fotomapa == 4) {
-      map.src = "mapa/mapa5.png";
+      map.src = "./mapa/mapa-images/mapa5.png";
       console.log("Quinto mapa");
     }
     else if (fotomapa == 5) {
       console.log("Sexto mapa");
-      map.src = "mapa/mapa6.png";
+      map.src = "./mapa/mapa-images/mapa6.png";
     }
-    else { map.src = "mapa/mapaoriginal.png"; }
+    else { map.src = "./mapa/mapa-images/mapaoriginal.png"; }
     console.log("la posicion del puntero es:", currentX, currentY);
-    console.log ("Cercanos:", cercanos);
+    console.log("Cercanos:", cercanos);
   }
   //####################################################################################################################
   //############################################# Fin de Mapa Interactivo###############################################
@@ -207,7 +208,7 @@ if ('webkitSpeechRecognition' in window) {
           productFinal = transformarCodigo[productoAñadido];
           socket2.emit("product added voice", productFinal);
           console.log("Producto añadido:", productFinal);
-          progresImage("productillo", productFinal.name);
+          progresImage(productFinal.name, 1);
         }
         interimTranscript += finalTranscript;
       } else {
@@ -256,38 +257,48 @@ if ('webkitSpeechRecognition' in window) {
 //############################################# Barra Nutricional#####################################################
 //####################################################################################################################
 const diccionarioNutricional = { 'Tomate': 5, 'Leche': 3, 'Cereales': 1 }
+let carrito = [];
+let valorNutricional = 0;
 
-const progresImage = (value) => {
-  const imageContainer = document.querySelector("#image-container");
-  const tasksfinished = document.querySelector("#finish-container");
-  tasksfinished.innerHTML = "";
+const progresImage = (value, op) => {
+  let PesoNutricional = 0;
+  const imageContainer = document.getElementById("image-container");
   let imageUrl = "";
-  for (let element of carrito) {
-    value += element.valornutricional;
+  //Añadimos o eliminamos en el carrito local el producto en cuestion
+  if (op == 1) {
+    carrito.push(value);
+  } else {
+    carrito.pop(value);
   }
-  //Definimos el valor de la variable value
-  if (carrito.length > 0) { value = value / carrito.length; }
-  else { value = 0; }
+  //Recalculamos el peso nutricional
+  for (let i = 0; i < carrito.length; i++) {
+    PesoNutricional += diccionarioNutricional[i];
+  }
+  //Definimos el valor de la variable 
+  valorNutricional = (PesoNutricional / carrito.length);
 
   // Dependiendo del valor de la variable, selecciona la imagen correspondiente
-  if (taskList.length === 0) {
+  imageUrl = "./mapa/mapa-images/fase1.png";
+  if (carrito.length === 0) {
     imageUrl = "";
-  } else if (value === 0) {
-    imageUrl = "mapa/fase5.png";
-  } else if (value > 0 && value <= 0.25) {
-    imageUrl = "mapa/fase4.png";
-  } else if (value > 0.25 && value <= 0.66) {
-    imageUrl = "mapa/fase3.png";
-  } else if (value > 0.66 && value < 1) {
-    imageUrl = "mapa/fase2.png";
-  } else if (value == 1) {
-    imageUrl = "mapa/fase1.png";
+  } else if (valorNutricional === 0) {
+    imageUrl = "./mapa-images/fase5.png";
+  } else if (valorNutricional > 0 && valorNutricional <= 0.25) {
+    imageUrl = "./mapa-images/fase4.png";
+  } else if (valorNutricional > 0.25 && valorNutricional <= 0.66) {
+    imageUrl = "./mapa-images/fase3.png";
+  } else if (valorNutricional > 0.66 && valorNutricional < 1) {
+    imageUrl = "./mapa-images/fase2.png";
+  } else if (valorNutricional == 5) {
+    imageUrl = "mapa/mapa-images/fase1.png";
   }
 
   // Rellena el div con la imagen seleccionada
-  imageContainer.innerHTML = `<img src="${imageUrl}" alt="ImagenValorNutricional">`;
-//####################################################################################################################
-//############################################# Fin Barra Nutricional ################################################
-//####################################################################################################################
+  let imageProgress = document.createElement("img");
+  imageProgress.src = imageUrl;
+  imageContainer.appendChild(imageProgress);
+  //####################################################################################################################
+  //############################################# Fin Barra Nutricional ################################################
+  //####################################################################################################################
 };
 

@@ -14,7 +14,7 @@
       href="https://fonts.googleapis.com/css?family=Inter&display=swap"
       rel="stylesheet"
     />
-    <link href="./style.css" rel="stylesheet" />
+    <link href="/style.css" rel="stylesheet" />
     <title>Document</title>
   </head>
   <body>
@@ -24,10 +24,15 @@
     <section class="shop-container">
       <div class="shop-map">
         <div id="container">
-          <img id="image" src="mapa/mapa1.png" alt="Example Image" />
+          <img
+            id="image"
+            src="../mapa/mapa-images/mapa1.png"
+            alt="Example Image"
+          />
           <div id="arrow"></div>
           <div id="compass"></div>
         </div>
+        <div id="image-container"></div>
       </div>
       <h3 class="section-title">Productos cercanos</h3>
       <div class="near-products" id="near-products"></div>
@@ -126,6 +131,6 @@
         renderProducts(productList);
       });
     </script>
-    <script src="/PruebasMapa/funcionmapa.js"></script>
+    <script src="../mapa/funcionmapa.js"></script>
   </body>
 </html>
