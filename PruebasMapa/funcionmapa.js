@@ -47,6 +47,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   var newX = 0;
   var newY = 0;
   var mover = 0;
+  var fotomapa = 0;
 
   function handleMotion(event) {
     var arrow = document.getElementById('arrow');
@@ -84,10 +85,10 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     // Aplica la nueva posición a la flecha
     arrow.style.left = newX + 'px';
     arrow.style.top = newY + 'px';
-
+    
     //Controla en que parte del mapa esta la flecha para mostrar los cercanos
-    if (newX >= 470) {
-      if (newY >= 470) {//derecha abajo
+    if (currentX >= 470) {
+      if (currentY >= 470) {//derecha abajo
         cercanos = 1;
       }
       else {
@@ -95,7 +96,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
       }
     }
     else {
-      if (newY >= 470) {//izquierda abajo
+      if (currentY >= 470) {//izquierda abajo
         cercanos = 3;
       }
       else {
@@ -103,46 +104,54 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
       }
     }
 
-
+    
     //Funcion para mostrar el mapa con progreso
-    var fotomapa = 0;
-    if (newX > 470 && newX < 500 && newY > 575 && newY < 600) {
+    
+    if (currentX > 420 && currentX < 460 && currentY > 420 && currentY < 460) {
       fotomapa = 1;
     }
-    else if (newX > 450 && newX < 480 && newY > 350 && newY < 380) {
+    else if (currentX > 420 && currentX < 460 && currentY > 250 && currentY < 290) {
       fotomapa = 2;
     }
-    else if (newX > 300 && newX < 340 && newY > 440 && newY < 480) {
+    else if (currentX > 300 && currentX < 340 && currentY > 230 && currentY < 270) {
       fotomapa = 3;
     }
-    else if (newX > 340 && newX < 380 && newY > 270 && newY < 310) {
+    else if (currentX > 310 && currentX < 350 && currentY > 155 && currentY < 195) {
       fotomapa = 4;
     }
-    else if (newX > 690 && newX < 730 && newY > 300 && newY < 340) {
+    else if (currentX > 625 && currentX < 665 && currentY > 142 && currentY < 182) {
       fotomapa = 5;
     }
 
     var map = document.getElementById('image');
-
+    console.log("El mapa actual es:",fotomapa);
     if (fotomapa == 0) {
+      console.log("Primer mapa");
       map.src = "mapa/mapa1.png";
     }
     else if (fotomapa == 1) {
+      console.log("Segundo mapa");
       map.src = "mapa/mapa2.png";
     }
     else if (fotomapa == 2) {
+      console.log("Tercer mapa");
       map.src = "mapa/mapa3.png";
     }
     else if (fotomapa == 3) {
+      console.log("Cuarto mapa");
       map.src = "mapa/mapa4.png";
     }
     else if (fotomapa == 4) {
       map.src = "mapa/mapa5.png";
+      console.log("Quinto mapa");
     }
     else if (fotomapa == 5) {
+      console.log("Sexto mapa");
       map.src = "mapa/mapa6.png";
     }
     else { map.src = "mapa/mapaoriginal.png"; }
+    console.log("la posicion del puntero es:", currentX, currentY);
+    console.log ("Cercanos:", cercanos);
   }
 
 }
