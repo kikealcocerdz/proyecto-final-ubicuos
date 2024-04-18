@@ -342,3 +342,9 @@ footer {
   border-bottom: 30px solid red; /* Base de la flecha */
   transform-origin: bottom center;
 }
+
+#image-container {
+  width: 30%;
+  height: 100%;
+  position: relative;
+}

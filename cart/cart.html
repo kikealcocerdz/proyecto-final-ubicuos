@@ -82,17 +82,24 @@
         description.classList.add("product-description");
 
         const nameParagraph = document.createElement("p");
-        nameParagraph.textContent = productName;
+        nameParagraph.textContent = productName.name;
 
         const priceContainer = document.createElement("div");
         priceContainer.classList.add("product-price-container");
 
         const pricePerUnit = document.createElement("p");
-        pricePerUnit.textContent = "$5.99 / lb";
+        pricePerUnit.textContent = productName.price;
 
         const totalPrice = document.createElement("p");
-        totalPrice.textContent = "$5.99";
+        totalPrice.textContent = productName.totalPrice;
 
+        const favimage = document.createElement("img");
+        favimage.src = productName.isFavorite
+          ? "./public/star-filled.png"
+          : "./public/star-unfilled.png";
+        favimage.alt = productName.isFavorite;
+
+        priceContainer.appendChild(favimage);
         priceContainer.appendChild(pricePerUnit);
         priceContainer.appendChild(totalPrice);
         description.appendChild(nameParagraph);
@@ -136,11 +143,12 @@
           });
         });
         socket.on("product list added", function (productListAdded) {
-          console.log("Lista de productos recibida:", productListAdded);
+          console.log("Lista de productos recibida por voz:", productListAdded);
           // Limpiar la lista actual de productos en el cliente
           productListContainer.innerHTML = "";
           // Agregar cada producto de la lista recibida al cliente
           productListAdded.forEach(function (productName) {
+            console.log("Producto recibido por voz:", productName);
             addProduct(productName);
           });
         });
@@ -153,5 +161,6 @@
         }
       });
     </script>
+    <script src="./cart.js"></script>
   </body>
 </html>

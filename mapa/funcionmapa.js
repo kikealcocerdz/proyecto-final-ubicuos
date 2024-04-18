@@ -206,9 +206,16 @@ if ('webkitSpeechRecognition' in window) {
           productoAñadido = finalTranscript.substring(finalTranscript.indexOf("añadir") + 6, finalTranscript.indexOf("añadir") + 12).trim();
           console.log("Texto añadido:", productoAñadido);
           productFinal = transformarCodigo[productoAñadido];
-          socket2.emit("product added voice", productFinal);
+          const productContent = {
+            name: productFinal, // Este será el nombre del producto añadido
+            imageUrl: "", // Esta será la URL de la imagen
+            price: "$5.99 / lb", // Puedes establecer el precio predeterminado o dejarlo vacío
+            totalPrice: "$5.99", // Puedes establecer el precio total predeterminado o dejarlo vacío
+            isFavorite: false, // Puedes establecer el valor predeterminado de isFavorite
+          };
+          socket2.emit("product added voice", productContent);
           console.log("Producto añadido:", productFinal);
-          progresImage(productFinal.name, 1);
+          progresImage(productContent.name, 1);
         }
         interimTranscript += finalTranscript;
       } else {
