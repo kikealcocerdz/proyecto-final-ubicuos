@@ -31,6 +31,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     else {
       orient = 3;
     }
+
     console.log(orient);
 
 
@@ -43,10 +44,14 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
       arrow.style.transform = 'rotate(' + rotation + 'rad)';
     }
   }
+  var newX = 0;
+  var newY = 0;
+  var mover = 0;
 
   function handleMotion(event) {
     var arrow = document.getElementById('arrow');
     var accelerationX = Math.abs(event.acceleration.x);
+  
 
     var compass = document.getElementById('compass');
     compass.innerHTML = 'Aceleración en x: ' + accelerationX + 'newX: ' + newX + 'newY: ' + newY;
@@ -55,26 +60,25 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     var speed = 0.1;
 
     // Calcula el cambio en la posición de la flecha
-    var deltaX = accelerationX * speed;
+    var mover = accelerationX * speed;
 
 
     // Obtiene la posición actual de la flecha
     var currentX = parseFloat(window.getComputedStyle(arrow).left);
     var currentY = parseFloat(window.getComputedStyle(arrow).top);
-    var newY = currentY;
 
     // Calcula la nueva posición de la flecha
     if (orient == 0) {
-      var newX = currentY + deltaY;
+      var newY = currentY - mover;
     }
     else if (orient == 1) {
-      var newX = currentX - deltaX;
+      var newX = currentX - mover;
     }
     else if (orient == 2) {
-      var newX = currentY - deltaY;
+      var newY = currentY + mover;
     }
     else {
-      var newX = currentX + deltaX;
+      var newX = currentX + mover;
     }
 
     // Aplica la nueva posición a la flecha
@@ -82,20 +86,20 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     arrow.style.top = newY + 'px';
 
     //Controla en que parte del mapa esta la flecha para mostrar los cercanos
-    if (newX > 100) {
-      if (newY > 100) {
+    if (newX >= 470) {
+      if (newY >= 470) {//derecha abajo
         cercanos = 1;
       }
       else {
-        cercanos = 2;
+        cercanos = 2;//derecha arriba
       }
     }
     else {
-      if (newY > 100) {
+      if (newY >= 470) {//izquierda abajo
         cercanos = 3;
       }
       else {
-        cercanos = 4;
+        cercanos = 4;//izquierda arriba
       }
     }
 
