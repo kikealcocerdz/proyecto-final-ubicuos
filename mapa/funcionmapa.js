@@ -215,7 +215,8 @@ if ('webkitSpeechRecognition' in window) {
           };
           socket2.emit("product added voice", productContent);
           console.log("Producto añadido:", productFinal);
-          progresImage(productContent.name, 1);
+          if (productContent.name != undefined){
+            progresImage(productContent.name, 1);}
         }
         interimTranscript += finalTranscript;
       } else {
@@ -271,6 +272,7 @@ const progresImage = (value, op) => {
   let PesoNutricional = 0;
   const imageContainer = document.getElementById("image-container");
   let imageUrl = "";
+  console.log("El valor del producto es:", value);
   //Añadimos o eliminamos en el carrito local el producto en cuestion
   if (op == 1) {
     carrito.push(value);
@@ -279,25 +281,25 @@ const progresImage = (value, op) => {
   }
   //Recalculamos el peso nutricional
   for (let i = 0; i < carrito.length; i++) {
-    PesoNutricional += diccionarioNutricional[i];
+    PesoNutricional += diccionarioNutricional[carrito[i]];
   }
+  
   //Definimos el valor de la variable 
   valorNutricional = (PesoNutricional / carrito.length);
-
   // Dependiendo del valor de la variable, selecciona la imagen correspondiente
-  imageUrl = "./mapa/mapa-images/fase1.png";
+  imageUrl = "";
   if (carrito.length === 0) {
     imageUrl = "";
-  } else if (valorNutricional === 0) {
-    imageUrl = "./mapa-images/fase5.png";
-  } else if (valorNutricional > 0 && valorNutricional <= 0.25) {
-    imageUrl = "./mapa-images/fase4.png";
-  } else if (valorNutricional > 0.25 && valorNutricional <= 0.66) {
-    imageUrl = "./mapa-images/fase3.png";
-  } else if (valorNutricional > 0.66 && valorNutricional < 1) {
-    imageUrl = "./mapa-images/fase2.png";
+  } else if (valorNutricional > 1 && valorNutricional <= 2) {
+    imageUrl = "./mapa/mapa-images/fase1.png";
+  } else if (valorNutricional > 2 && valorNutricional <= 3) {
+    imageUrl = "./mapa/mapa-images/fase2.png";
+  } else if (valorNutricional > 3 && valorNutricional <= 4) {
+    imageUrl = "./mapa/mapa-images/fase3.png";
+  } else if (valorNutricional > 4 && valorNutricional < 5) {
+    imageUrl = "./mapa/mapa-images/fase5.png";
   } else if (valorNutricional == 5) {
-    imageUrl = "mapa/mapa-images/fase1.png";
+    imageUrl = "./mapa/mapa-images/fase5.png";
   }
 
   // Rellena el div con la imagen seleccionada
