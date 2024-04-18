@@ -33,11 +33,11 @@
     </section>
     <footer>
       <div class="shop-actions">
-        <a href="useractive.html" class="shop-action-button">
-          <img src="./public/continueshop.png" />
+        <a href="../useractive/useractive.html" class="shop-action-button">
+          <img src="../public/continueshop.png" />
         </a>
-        <a class="shop-action-button">
-          <img src="./public/finish-icon.png" />
+        <a href="../QRCode/pagofinal.html" class="shop-action-button">
+          <img src="../public/finish-icon.png" />
         </a>
       </div>
     </footer>
@@ -95,8 +95,8 @@
 
         const favimage = document.createElement("img");
         favimage.src = productName.isFavorite
-          ? "./public/star-filled.png"
-          : "./public/star-unfilled.png";
+          ? "../public/star-filled.png"
+          : "../public/star-unfilled.png";
         favimage.alt = productName.isFavorite;
 
         priceContainer.appendChild(favimage);

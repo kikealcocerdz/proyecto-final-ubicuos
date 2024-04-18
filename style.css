@@ -111,6 +111,20 @@ header {
   position: relative;
 }
 
+.item-lista-final{
+  margin: 10px;
+  width: 100%;
+  text-align: center;
+  color: white;
+  display: flex;
+  font-size: 1.3em;
+  text-decoration: dotted;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
 .item-lista img{
   width: 100%;
   height: 100%;
@@ -347,4 +361,38 @@ footer {
   width: 30%;
   height: 100%;
   position: relative;
+}
+
+.qr-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 20px;
+}
+
+video{
+  width: 80vw;
+  height: 40vh;
+  object-fit: cover;
+  border: 5px solid #ccc;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.heading-final{
+  font-size: 2em;
+  color: white;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.subheading-final{
+  font-size: 1em;
+  color: white;
+  text-align: center;
+  margin-top: 1rem;
 }

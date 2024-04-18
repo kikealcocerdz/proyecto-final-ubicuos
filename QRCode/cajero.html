@@ -6,27 +6,75 @@
     <title>Generador de Código QR</title>
     <link rel="stylesheet" href="stylesqr.css" />
     <link rel="stylesheet" href="../style.css" />
+    <style>
+      /* Estilos adicionales */
+      .item-lista-final {
+        margin-bottom: 10px;
+      }
+    </style>
   </head>
   <body>
     <header>
       <a href="/" class="shop-title">easySHOP</a>
     </header>
     <section class="shop-container">
+      <h2 class="heading-final">Lista de productos del cliente</h2>
+      <!-- Lista desordenada para contener los productos -->
+      <ul id="productListContainer"></ul>
+      <div id="totalAmount"></div>
+      <!-- Nuevo div para mostrar el total -->
+
       <button id="generateQR">Generar Código QR</button>
       <div id="qrCode"></div>
     </section>
-    <footer>
-      <div class="shop-actions">
-        <a href="cart.html" class="shop-action-button">
-          <img src="./public/list-icon.png" />
-        </a>
-        <a href="./QRCode/cajero.html" class="shop-action-button">
-          <img src="./public/finish-icon.png" />
-        </a>
-      </div>
-    </footer>
-
+    <script src="/socket.io/socket.io.js"></script>
     <script src="qrcode.js"></script>
     <script src="scriptqr.js"></script>
+    <script>
+      const productListContainer = document.getElementById(
+        "productListContainer"
+      );
+      const totalAmountContainer = document.getElementById("totalAmount"); // Nuevo contenedor para el total
+      const socket = io();
+
+      function addProductRest(product) {
+        // Crear un elemento de lista
+        const listItem = document.createElement("li");
+        listItem.classList.add("item-lista-final");
+
+        // Crear un elemento de párrafo para el nombre del producto
+        const pName = document.createElement("p");
+        pName.textContent = product.name;
+        listItem.appendChild(pName);
+
+        // Crear un elemento de párrafo para el precio del producto
+        const pPrice = document.createElement("p");
+        pPrice.textContent = `Precio: ${product.price}`; // Agrega el precio al elemento
+        listItem.appendChild(pPrice);
+
+        // Agregar el elemento de lista al contenedor de lista
+        productListContainer.appendChild(listItem);
+
+        return product.price; // Retorna el precio del producto
+      }
+
+      window.onload = function () {
+        let totalAmount = 0; // Inicializa el total en cero
+
+        socket.on("product list added", function (productListAdded) {
+          console.log("Lista de productos recibida por voz:", productListAdded);
+          productListAdded.forEach(function (product) {
+            console.log("Producto recibido por voz:", product);
+            addProductRest(product); // Llama a addProductRest para agregar el producto
+            totalAmount += product.totalPrice; // Agrega el precio del producto al total
+          });
+
+          // Muestra el total en el contenedor correspondiente
+          totalAmountContainer.textContent = `Total a pagar: $${totalAmount.toFixed(
+            2
+          )}`;
+        });
+      };
+    </script>
   </body>
 </html>

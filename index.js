@@ -70,6 +70,18 @@ app.get('/cart.html', (req, res) => {
   res.sendFile(join(__dirname, './cart/cart.html'));
 });
 
+app.get('/cajero.html', (req, res) => {
+  // Emitir el evento cuando el usuario se conecta a /cart.html
+  io.emit('user connected');
+
+  // Emitir la lista actual de productos añadidos al usuario que se conecta a /cart.html
+  console.log('Current product list added:', productListAdded);
+  io.to('cajero').emit('product list added', productListAdded); // Cambio aquí
+
+  // Responder con el archivo cart.html
+  res.sendFile(join(__dirname, './QRCODE/cajero.html'));
+});
+
 
 
 // Escuchar conexiones de Socket.IO

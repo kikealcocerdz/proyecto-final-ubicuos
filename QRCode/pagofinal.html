@@ -4,44 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PayMe - Escaneo de Código QR</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-
-      #video {
-        width: 100%;
-        max-width: 400px;
-        height: auto;
-        border: 2px solid #333;
-        border-radius: 8px;
-      }
-
-      #result {
-        margin-top: 20px;
-        text-align: center;
-      }
-
-      #payLink {
-        display: none;
-        margin-top: 20px;
-      }
-    </style>
+    <link rel="stylesheet" href="../style.css" />
   </head>
   <body>
-    <div id="container">
-      <h1>Escaneo de Código QR</h1>
+    <header>
+      <a href="/" class="shop-title">easySHOP</a>
+    </header>
+    <section class="shop-container">
+      <h1 class="heading-final">Finalización de compra</h1>
+      <h3 class="subheading-final">
+        A continuación escanee con la cámara el codigo QR proporcionado por la
+        persona responsable en caja
+      </h3>
       <video id="video" autoplay></video>
       <div style="display: none" id="result"></div>
-      <a id="payLink" href="#" target="_blank">PAGAR COMPRA</a>
-    </div>
+      <a
+        id="payLink"
+        class="qr-button"
+        style="display: none"
+        href="#"
+        target="_blank"
+        >PAGAR COMPRA</a
+      >
+      <a class="link-nextstep" style="display: none" href="../index.html"
+        >COMPRAR DE NUEVO</a
+      >
+    </section>
 
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script>
@@ -66,6 +54,7 @@
             // Mostrar el enlace de pagar
             const payLink = document.getElementById("payLink");
             payLink.style.display = "block";
+            document.querySelector(".link-nextstep").style.display = "block";
             payLink.href = content; // Asignar la URL escaneada al enlace
           });
 

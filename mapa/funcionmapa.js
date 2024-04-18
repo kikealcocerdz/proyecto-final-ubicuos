@@ -210,13 +210,14 @@ if ('webkitSpeechRecognition' in window) {
             name: productFinal, // Este será el nombre del producto añadido
             imageUrl: "", // Esta será la URL de la imagen
             price: "$5.99 / lb", // Puedes establecer el precio predeterminado o dejarlo vacío
-            totalPrice: "$5.99", // Puedes establecer el precio total predeterminado o dejarlo vacío
+            totalPrice: 5.99, // Puedes establecer el precio total predeterminado o dejarlo vacío
             isFavorite: false, // Puedes establecer el valor predeterminado de isFavorite
           };
           socket2.emit("product added voice", productContent);
           console.log("Producto añadido:", productFinal);
-          if (productContent.name != undefined){
-            progresImage(productContent.name, 1);}
+          if (productContent.name != undefined) {
+            progresImage(productContent.name, 1);
+          }
         }
         interimTranscript += finalTranscript;
       } else {
@@ -283,7 +284,7 @@ const progresImage = (value, op) => {
   for (let i = 0; i < carrito.length; i++) {
     PesoNutricional += diccionarioNutricional[carrito[i]];
   }
-  
+
   //Definimos el valor de la variable 
   valorNutricional = (PesoNutricional / carrito.length);
   // Dependiendo del valor de la variable, selecciona la imagen correspondiente
