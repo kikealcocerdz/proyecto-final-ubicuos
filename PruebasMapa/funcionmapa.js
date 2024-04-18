@@ -1,5 +1,8 @@
 var orient = 0;
 var cercanos = 0;
+const diccionario = { 'abc12': 'Tomate', 'def34': 'Lechuga' }
+
+
 if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   window.addEventListener('deviceorientation', handleOrientation);
   window.addEventListener('devicemotion', handleMotion);
@@ -7,14 +10,14 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   function handleOrientation(event) {
     var arrow = document.getElementById('arrow');
     var alpha = event.alpha; // Obtén el valor de la orientación del dispositivo
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
       // Obtener las coordenadas x e y del punto donde se hizo clic/touch
       var x = event.clientX;
       var y = event.clientY;
-  
+
       // Imprimir las coordenadas en la consola
       console.log("Posición X:", x, "Posición Y:", y);
-  });
+    });
 
     if (alpha > 0 && alpha < 90) {
       orient = 0;
@@ -58,6 +61,7 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     // Obtiene la posición actual de la flecha
     var currentX = parseFloat(window.getComputedStyle(arrow).left);
     var currentY = parseFloat(window.getComputedStyle(arrow).top);
+    var newY = currentY;
 
     // Calcula la nueva posición de la flecha
     if (orient == 0) {
@@ -98,19 +102,19 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 
     //Funcion para mostrar el mapa con progreso
     var fotomapa = 0;
-    if (newX > 470 && newx<500 && newY > 575 && newY<600) {
+    if (newX > 470 && newx < 500 && newY > 575 && newY < 600) {
       fotomapa = 1;
     }
-    else if (newX > 450 && newx<480 && newY > 350 && newY<380) {
+    else if (newX > 450 && newx < 480 && newY > 350 && newY < 380) {
       fotomapa = 2;
     }
-    else if (newX > 300 && newx<340 && newY > 440 && newY<480) {
+    else if (newX > 300 && newx < 340 && newY > 440 && newY < 480) {
       fotomapa = 3;
     }
-    else if (newX > 340 && newx<380 && newY > 270 && newY<310) {
+    else if (newX > 340 && newx < 380 && newY > 270 && newY < 310) {
       fotomapa = 4;
     }
-    else if (newX > 690 && newx<730 && newY > 300 && newY<340) {
+    else if (newX > 690 && newx < 730 && newY > 300 && newY < 340) {
       fotomapa = 5;
     }
 
@@ -142,9 +146,11 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
 // Obtener el botón y el área de transcripción del DOM
 const startButton = document.getElementById('startButton');
 //const transcriptionDiv = document.getElementById('transcription');
-
+const transformarCodigo = { "abc12": "Tomate" }
 let textoAñadido = ""; // Variable para almacenar el texto añadido
-
+let productoAñadido = ""; // Variable para almacenar el texto añadido
+let productFinal = ""; // Variable para almacenar el producto final
+var socket2 = io();
 console.log('Reconocimiento de voz creado.');
 
 // Verificar si el navegador soporta la API de reconocimiento de voz
@@ -166,9 +172,12 @@ if ('webkitSpeechRecognition' in window) {
         // Verificar si el texto contiene la palabra "añadir"
         if (finalTranscript.toLowerCase().includes("añadir")) {
           // Obtener el texto después de la palabra "añadir"
-          textoAñadido = finalTranscript.substring(finalTranscript.indexOf("añadir") + 6, finalTranscript.indexOf("añadir") + 12).trim();
-          console.log("Texto añadido:", textoAñadido);
-          producto=diccionario[textoAñadido];
+          productoAñadido = finalTranscript.substring(finalTranscript.indexOf("añadir") + 6, finalTranscript.indexOf("añadir") + 12).trim();
+          console.log("Texto añadido:", productoAñadido);
+          productFinal = transformarCodigo[productoAñadido];
+          socket2.emit("product added voice", productFinal);
+          console.log("Producto añadido:", productFinal);
+          progresImage("productillo", productFinal.name);
         }
         interimTranscript += finalTranscript;
       } else {
@@ -188,6 +197,7 @@ if ('webkitSpeechRecognition' in window) {
   recognition.onerror = function (event) {
     console.error('Error en el reconocimiento de voz:', event.error);
   };
+
   var empezar = false;
   // Cuando se presiona el botón de inicio
   startButton.addEventListener('click', function () {
@@ -196,12 +206,10 @@ if ('webkitSpeechRecognition' in window) {
     if (empezar == false) {
       recognition.start();
       empezar = true;
-      startButton.textContent = 'Escuchando...';
     }
     else {
       recognition.stop();
       empezar = false;
-      startButton.textContent = 'Iniciar';
     }
   });
 } else {
@@ -211,13 +219,13 @@ if ('webkitSpeechRecognition' in window) {
   startButton.textContent = 'No soportado';
 }
 
-/*
+const diccionarioNutricional = { 'Tomate': 5, 'Leche': 3, 'Cereales': 1 }
+
 const progresImage = (value) => {
   const imageContainer = document.querySelector("#image-container");
   const tasksfinished = document.querySelector("#finish-container");
   tasksfinished.innerHTML = "";
   let imageUrl = "";
-  let value = 0;
   for (let element of carrito) {
     value += element.valornutricional;
   }
@@ -243,5 +251,4 @@ const progresImage = (value) => {
   // Rellena el div con la imagen seleccionada
   imageContainer.innerHTML = `<img src="${imageUrl}" alt="ImagenValorNutricional">`;
 };
-*/
 
