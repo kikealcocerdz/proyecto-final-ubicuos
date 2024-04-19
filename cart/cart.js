@@ -42,3 +42,39 @@ productsAll.addEventListener("touchstart", (event) => {
 //####################################################################################################################
 //############################################ Fin Eliminar Producto #################################################
 //####################################################################################################################
+
+
+//####################################################################################################################
+//############################################ Shake                  #################################################
+//####################################################################################################################
+// Función para manejar el evento de shake
+function handleShake(event) {
+    // Obtener los datos de la aceleración en los ejes x, y, z
+    const accelerationX = event.accelerationIncludingGravity.x;
+    const accelerationY = event.accelerationIncludingGravity.y;
+    const accelerationZ = event.accelerationIncludingGravity.z;
+  
+    // Calcular la aceleración total
+    let agitar = Math.sqrt(
+      accelerationX * accelerationX +
+      accelerationY * accelerationY +
+      accelerationZ * accelerationZ
+    );
+  
+    // Definir un umbral para determinar si se considera una sacudida
+    const agitarlimite = 15; // Puedes ajustar este valor según sea necesario
+  
+    // Si la aceleración total supera el umbral, se considera una sacudida
+    if (agitar > agitarlimite) {
+      console.log('¡El dispositivo ha sido agitado!');
+      // Aquí puedes ejecutar la función que desees cuando se agite el dispositivo
+    }
+  }
+  
+  // Agregar un listener para el evento 'devicemotion'
+  window.addEventListener('devicemotion', handleShake);
+  
+
+//####################################################################################################################
+//############################################ Shake                  #################################################
+//####################################################################################################################

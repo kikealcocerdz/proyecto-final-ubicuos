@@ -171,6 +171,78 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   //############################################# Fin de Mapa Interactivo###############################################
   //####################################################################################################################
 }
+const diccionarioPrecio = { 'Tomate': 2, 'Leche': 3, 'Cereales': 1 }
+  let presupuestoTotal = document.getElementById('budget-input').value;
+  console.log("The budget is:",presupuestoTotal);
+  let presupuestoRemaining = 0;
+
+const progresPresupuesto = () => {
+  let presupuestoTotal = document.getElementById('budget-input').value;
+  if (presupuestoTotal==undefined){
+    presupuestoTotal=99999999999999999;
+  }
+  let presupuestoProg = 0;
+  //Recalculamos el precio total
+  for (let i = 0; i < carrito.length; i++) {
+    presupuestoProg += diccionarioPrecios[carrito[i]];
+  }
+  presupuestoRemaining = presupuestoTotal - presupuestoProg;
+  console.log("The budget is:",presupuestoTotal)
+
+};
+//####################################################################################################################
+//############################################# Barra Nutricional#####################################################
+//####################################################################################################################
+const diccionarioNutricional = { 'Tomate': 5, 'Leche': 3, 'Cereales': 1 }
+let carrito = [];
+let valorNutricional = 0;
+
+const progresImage = (value, op) => {
+  let PesoNutricional = 0;
+  const imageContainer = document.getElementById("image-container");
+  let imageUrl = "";
+  console.log("El valor del producto es:", value);
+  //Añadimos o eliminamos en el carrito local el producto en cuestion
+  if (op == 1) {
+    carrito.push(value);
+  } else {
+    carrito.pop(value);
+  }
+  //Recalculamos el peso nutricional
+  for (let i = 0; i < carrito.length; i++) {
+    PesoNutricional += diccionarioNutricional[carrito[i]];
+  }
+
+  //Definimos el valor de la variable 
+  valorNutricional = (PesoNutricional / carrito.length);
+  // Dependiendo del valor de la variable, selecciona la imagen correspondiente
+  imageUrl = "";
+  if (carrito.length === 0) {
+    imageUrl = "";
+  } else if (valorNutricional > 1 && valorNutricional <= 2) {
+    imageUrl = "./mapa/mapa-images/fase1.png";
+  } else if (valorNutricional > 2 && valorNutricional <= 3) {
+    imageUrl = "./mapa/mapa-images/fase2.png";
+  } else if (valorNutricional > 3 && valorNutricional <= 4) {
+    imageUrl = "./mapa/mapa-images/fase3.png";
+  } else if (valorNutricional > 4 && valorNutricional < 5) {
+    imageUrl = "./mapa/mapa-images/fase5.png";
+  } else if (valorNutricional == 5) {
+    imageUrl = "./mapa/mapa-images/fase5.png";
+  }
+
+  // Rellena el div con la imagen seleccionada
+  let imageProgress = document.createElement("img");
+  imageProgress.src = imageUrl;
+  imageContainer.appendChild(imageProgress);
+
+  progresPresupuesto();
+};
+  //####################################################################################################################
+  //############################################# Fin Barra Nutricional ################################################
+  //####################################################################################################################
+  
+
 //####################################################################################################################
 //############################################# SpeechAPI#############################################################
 //####################################################################################################################
@@ -262,53 +334,5 @@ if ('webkitSpeechRecognition' in window) {
 //############################################# Fin SpeechAPI#########################################################
 //####################################################################################################################
 
-//####################################################################################################################
-//############################################# Barra Nutricional#####################################################
-//####################################################################################################################
-const diccionarioNutricional = { 'Tomate': 5, 'Leche': 3, 'Cereales': 1 }
-let carrito = [];
-let valorNutricional = 0;
 
-const progresImage = (value, op) => {
-  let PesoNutricional = 0;
-  const imageContainer = document.getElementById("image-container");
-  let imageUrl = "";
-  console.log("El valor del producto es:", value);
-  //Añadimos o eliminamos en el carrito local el producto en cuestion
-  if (op == 1) {
-    carrito.push(value);
-  } else {
-    carrito.pop(value);
-  }
-  //Recalculamos el peso nutricional
-  for (let i = 0; i < carrito.length; i++) {
-    PesoNutricional += diccionarioNutricional[carrito[i]];
-  }
-
-  //Definimos el valor de la variable 
-  valorNutricional = (PesoNutricional / carrito.length);
-  // Dependiendo del valor de la variable, selecciona la imagen correspondiente
-  imageUrl = "";
-  if (carrito.length === 0) {
-    imageUrl = "";
-  } else if (valorNutricional > 1 && valorNutricional <= 2) {
-    imageUrl = "./mapa/mapa-images/fase1.png";
-  } else if (valorNutricional > 2 && valorNutricional <= 3) {
-    imageUrl = "./mapa/mapa-images/fase2.png";
-  } else if (valorNutricional > 3 && valorNutricional <= 4) {
-    imageUrl = "./mapa/mapa-images/fase3.png";
-  } else if (valorNutricional > 4 && valorNutricional < 5) {
-    imageUrl = "./mapa/mapa-images/fase5.png";
-  } else if (valorNutricional == 5) {
-    imageUrl = "./mapa/mapa-images/fase5.png";
-  }
-
-  // Rellena el div con la imagen seleccionada
-  let imageProgress = document.createElement("img");
-  imageProgress.src = imageUrl;
-  imageContainer.appendChild(imageProgress);
-  //####################################################################################################################
-  //############################################# Fin Barra Nutricional ################################################
-  //####################################################################################################################
-};
 
