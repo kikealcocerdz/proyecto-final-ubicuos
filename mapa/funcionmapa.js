@@ -172,14 +172,14 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   //####################################################################################################################
 }
 const diccionarioPrecio = { 'Tomate': 2, 'Leche': 3, 'Cereales': 1 }
-  let presupuestoTotal = document.getElementById('budget-input').value;
-  console.log("The budget is:",presupuestoTotal);
-  let presupuestoRemaining = 0;
+let presupuestoTotal = document.getElementById('budget-input').value;
+console.log("The budget is:", presupuestoTotal);
+let presupuestoRemaining = 0;
 
 const progresPresupuesto = () => {
   let presupuestoTotal = document.getElementById('budget-input').value;
-  if (presupuestoTotal==undefined){
-    presupuestoTotal=99999999999999999;
+  if (presupuestoTotal == undefined) {
+    presupuestoTotal = 99999999999999999;
   }
   let presupuestoProg = 0;
   //Recalculamos el precio total
@@ -187,7 +187,7 @@ const progresPresupuesto = () => {
     presupuestoProg += diccionarioPrecios[carrito[i]];
   }
   presupuestoRemaining = presupuestoTotal - presupuestoProg;
-  console.log("The budget is:",presupuestoTotal)
+  console.log("The budget is:", presupuestoTotal)
 
 };
 //####################################################################################################################
@@ -238,10 +238,10 @@ const progresImage = (value, op) => {
 
   progresPresupuesto();
 };
-  //####################################################################################################################
-  //############################################# Fin Barra Nutricional ################################################
-  //####################################################################################################################
-  
+//####################################################################################################################
+//############################################# Fin Barra Nutricional ################################################
+//####################################################################################################################
+
 
 //####################################################################################################################
 //############################################# SpeechAPI#############################################################
@@ -277,6 +277,7 @@ if ('webkitSpeechRecognition' in window) {
           // Obtener el texto después de la palabra "añadir"
           productoAñadido = finalTranscript.substring(finalTranscript.indexOf("añadir") + 6, finalTranscript.indexOf("añadir") + 12).trim();
           console.log("Texto añadido:", productoAñadido);
+          navigator.vibrate(200);
           productFinal = transformarCodigo[productoAñadido];
           const productContent = {
             name: productFinal, // Este será el nombre del producto añadido
