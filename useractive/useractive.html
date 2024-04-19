@@ -100,9 +100,10 @@
 
           const productName = document.createElement("p");
           productName.textContent = product.name;
-
+          productDiv.id = productName.textContent;
           productDiv.appendChild(productImg);
           productDiv.appendChild(productName);
+
           nearProductsContainer.appendChild(productDiv);
         });
       }
