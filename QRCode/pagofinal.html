@@ -35,10 +35,13 @@
     <script>
       // Acceder al elemento de video
       const video = document.getElementById("video");
+      navigator.mediaDevices.enumerateDevices().then(function (devices) {
+        console.log(devices);
+      });
 
       // Obtener los medios de la cámara
       navigator.mediaDevices
-        .getUserMedia({ video: true })
+        .getUserMedia({ video: { facingMode: "environment" } })
         .then(function (stream) {
           // Asignar el stream de la cámara al elemento de video
           video.srcObject = stream;
