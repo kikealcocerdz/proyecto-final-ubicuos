@@ -1,43 +1,6 @@
 //####################################################################################################################
 //############################################## Eliminar Producto ###################################################
-//####################################################################################################################
 
-// Si un producto se mantiene seleccionado y el dispositivo es girado 180 grados, eliminar el producto
-let productsList = document.querySelectorAll(".lista-container");
-// get item-lista's children
-let productsAll = [];
-productsList.forEach((product) => {
-  productsChildren.push(product.children);
-});
-
-// Si un elemento de la lista de productos se mantiene seleccionado y el dispositivo es girado 180 grados, eliminar el producto
-productsAll.addEventListener("touchstart", (event) => {
-  event.preventDefault();
-  let touchMoved = false;
-  const touchTimer = setTimeout(() => {
-    if (!touchMoved) {
-      // If the product is selected, change its color
-      product.style.backgroundColor = "lightyellow";
-    }
-  }, 1500);
-  let initialRotation;
-  product.addEventListener("touchstart", function () {
-    console.log("Producto seleccionado.");
-    this.style.transform = "scale(1.1)";
-    window.addEventListener("deviceorientation", function (event) {
-      if (initialRotation === undefined) {
-        initialRotation = event.alpha;
-      } else {
-        const rotationDifference = Math.abs(event.alpha - initialRotation);
-        if (rotationDifference > 180 || rotationDifference < -180) {
-          const product = document.querySelector(".product");
-          console.log("Producto" + { product } + "va a ser eliminado.");
-          product.remove();
-        }
-      }
-    });
-  });
-});
 
 //####################################################################################################################
 //############################################ Fin Eliminar Producto #################################################
@@ -49,28 +12,66 @@ productsAll.addEventListener("touchstart", (event) => {
 //####################################################################################################################
 // Función para manejar el evento de shake
 function handleShake(event) {
-  // Obtener los datos de la aceleración en los ejes x, y, z
-  const accelerationX = event.accelerationIncludingGravity.x;
-  const accelerationY = event.accelerationIncludingGravity.y;
-  const accelerationZ = event.accelerationIncludingGravity.z;
+  if (event.acceleration) {
+    const accelerationX = event.acceleration.x;
+    const accelerationY = event.acceleration.y;
+    const accelerationZ = event.acceleration.z;
 
-  // Calcular la aceleración total
-  let agitar = Math.sqrt(
-    accelerationX * accelerationX +
-    accelerationY * accelerationY +
-    accelerationZ * accelerationZ
-  );
+    const accelerationMagnitude = Math.sqrt(
+      accelerationX * accelerationX +
+      accelerationY * accelerationY +
+      accelerationZ * accelerationZ
+    );
 
-  // Definir un umbral para determinar si se considera una sacudida
-  const agitarlimite = 15; // Puedes ajustar este valor según sea necesario
+    const shakeThreshold = 15;
 
-  // Si la aceleración total supera el umbral, se considera una sacudida
-  if (agitar > agitarlimite) {
-    navigator.vibrate(200);
-    console.log('¡El dispositivo ha sido agitado!');
-    // Aquí puedes ejecutar la función que desees cuando se agite el dispositivo
+    if (accelerationMagnitude > shakeThreshold) {
+      // Ordena la lista
+      
+      
+      // Vibrar solo en respuesta a la sacudida
+      if (navigator.vibrate) {
+        navigator.vibrate(200);
+      }6
+      ordenarLista();
+
+    }
+  } else {
+    console.log('No se han proporcionado datos de aceleración.');
   }
 }
+
+// Función para ordenar la lista de productos
+function ordenarLista() {
+  const productContainer = document.getElementById("product-list");
+  const products = productContainer.querySelectorAll(".lista-placeholder");
+  
+  // Convertir la lista de nodos a un array para poder ordenarla
+  const productsArray = Array.from(products);
+  
+  // Ordenar los elementos el nombre del producto
+  productsArray.sort((a, b) => {
+    const nameA = a.id.toUpperCase();
+    const nameB = b.id.toUpperCase();
+    
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    return 0;
+  });
+  
+  // Limpiar el contenedor de productos
+  productContainer.innerHTML = "";
+  
+  // Agregar los elementos ordenados de vuelta al contenedor
+  productsArray.forEach(product => {
+    productContainer.appendChild(product);
+  });
+}
+
 
 // Agregar un listener para el evento 'devicemotion'
 window.addEventListener('devicemotion', handleShake);
