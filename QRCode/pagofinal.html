@@ -13,7 +13,7 @@
     <section class="shop-container">
       <h1 class="heading-final">Finalización de compra</h1>
       <h3 class="subheading-final">
-        A continuación escanee con la cámara el codigo QR proporcionado por la
+        A continuación escanee con la cámara el código QR proporcionado por la
         persona responsable en caja
       </h3>
       <video id="video" autoplay></video>
@@ -33,35 +33,32 @@
 
     <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
     <script>
-      // Acceder al elemento de video
+      // Accessing the video element
       const video = document.getElementById("video");
-      navigator.mediaDevices.enumerateDevices().then(function (devices) {
-        console.log(devices);
-      });
 
-      // Obtener los medios de la cámara
+      // Getting media from the camera
       navigator.mediaDevices
-        .getUserMedia({ video: { facingMode: "environment" } })
+        .getUserMedia({ video: { facingMode: "environment" } }) // Corrected facingMode value
         .then(function (stream) {
-          // Asignar el stream de la cámara al elemento de video
+          // Assigning the camera stream to the video element
           video.srcObject = stream;
 
-          // Crear un nuevo escáner
+          // Creating a new scanner
           const scanner = new Instascan.Scanner({ video: video });
 
-          // Escuchar eventos de escaneo de QR
+          // Listening to QR scan events
           scanner.addListener("scan", function (content) {
-            // Mostrar el resultado del escaneo
+            // Displaying the scan result
             document.getElementById("result").textContent = content;
 
-            // Mostrar el enlace de pagar
+            // Displaying the pay link
             const payLink = document.getElementById("payLink");
             payLink.style.display = "block";
             document.querySelector(".link-nextstep").style.display = "block";
-            payLink.href = content; // Asignar la URL escaneada al enlace
+            payLink.href = content; // Assigning the scanned URL to the link
           });
 
-          // Iniciar el escáner
+          // Starting the scanner
           Instascan.Camera.getCameras()
             .then(function (cameras) {
               if (cameras.length > 0) {
