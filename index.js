@@ -20,7 +20,7 @@ app.get("/product-list", (req, res) => {
 });
 
 app.get("/product-list-added", (req, res) => {
-  res.json(productList);
+  res.json(productListAdded);
 });
 
 // Emitir la lista actual de productos a cualquier usuario que se conecte
@@ -44,15 +44,32 @@ io.on("connection", (socket) => {
     console.log("Current product list sonido:", productListAdded);
     io.emit("product list added", productListAdded); // Emite la lista de productos a todos los clientes conectados
   });
+
+  // Eliminar un producto específico de productListAddedd
   socket.on("product deleted voice", (productName) => {
-    productListAdded.pop(productName);
-    console.log("Current product list sonido:", productListAdded);
-    io.emit("product list added", productListAdded); // Emite la lista de productos a todos los clientes conectados
+    console.log("Producto a eliminar name:", productName);
+    const index = productListAdded.indexOf(productName);
+    if (index !== -1) {
+      productListAdded.splice(index, 1);
+    }
+    console.log("Current product list sonido deleted:", productListAdded);
+    io.emit("product list added", productListAdded);
   });
+
+  // Eliminar un producto específico de productList
   socket.on("product deleted", (productName) => {
-    productList.pop(productName);
+    const index = productList.indexOf(productName);
+    if (index !== -1) {
+      productList.splice(index, 1);
+    }
     console.log("Current product list:", productList);
-    io.emit("product list", productList); // Emite la lista de productos a todos los clientes conectados
+    io.emit("product list", productList);
+  });
+
+  // Escuchar el evento de cambio de lista
+  socket.on("changeList", (list) => {
+    productListAdded = list;
+    io.emit("product list added", productListAdded);
   });
 });
 
@@ -66,31 +83,40 @@ app.get("/useractive.html", (req, res) => {
   res.sendFile(join(__dirname, "./useractive/useractive.html"));
 });
 
+// Configurar el controlador de ruta para la página /cart.html
 app.get("/cart.html", (req, res) => {
   // Emitir el evento cuando el usuario se conecta a /cart.html
   io.emit("user connected");
-
-  // Emitir la lista actual de productos añadidos al usuario que se conecta a /cart.html
-  console.log("Current product list added:", productListAdded);
-  io.to("cart").emit("product list added", productListAdded); // Cambio aquí
 
   // Responder con el archivo cart.html
   res.sendFile(join(__dirname, "./cart/cart.html"));
 });
 
+// Configurar el controlador de ruta para la página /cajero.html
 app.get("/cajero.html", (req, res) => {
-  // Emitir el evento cuando el usuario se conecta a /cart.html
+  // Emitir el evento cuando el usuario se conecta a /cajero.html
   io.emit("user connected");
 
-  // Emitir la lista actual de productos añadidos al usuario que se conecta a /cart.html
+  // Emitir la lista actual de productos añadidos al usuario que se conecta a /cajero.html
   console.log("Current product list added:", productListAdded);
-  io.to("cajero").emit("product list added", productListAdded); // Cambio aquí
+  io.to("cajero").emit("product list added", productListAdded);
 
-  // Responder con el archivo cart.html
+  // Responder con el archivo cajero.html
   res.sendFile(join(__dirname, "./QRCODE/cajero.html"));
 });
 
 // Escuchar conexiones de Socket.IO
 server.listen(3000, () => {
   console.log("Server running at http://localhost:3000");
+});
+
+// Escuchar el evento de eliminación de producto por voz
+io.on("product deleted voice", (productName) => {
+  console.log("Producto a eliminar name:", productName);
+  const index = productListAdded.indexOf(productName);
+  if (index !== -1) {
+    productListAdded.splice(index, 1);
+  }
+  console.log("Current product list sonido deleted:", productListAdded);
+  io.emit("product list added", productListAdded); // Emitir la lista actualizada de productos añadidos
 });
