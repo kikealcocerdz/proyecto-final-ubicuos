@@ -144,6 +144,7 @@
             addProductRest(productName);
           });
         });
+
         socket.on("product list added", function (productListAdded) {
           console.log("Lista de productos recibida por voz:", productListAdded);
           // Limpiar la lista actual de productos en el cliente

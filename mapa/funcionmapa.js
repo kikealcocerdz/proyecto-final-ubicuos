@@ -171,25 +171,8 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
   //############################################# Fin de Mapa Interactivo###############################################
   //####################################################################################################################
 }
-const diccionarioPrecio = { 'Tomate': 2, 'Leche': 3, 'Cereales': 1 }
-let presupuestoTotal = 100;//Cambiar
-console.log("The budget is:", presupuestoTotal);
-let presupuestoRemaining = 0;
 
-const progresPresupuesto = () => {
-  let presupuestoTotal = document.getElementById('budget-input').value;
-  if (presupuestoTotal == undefined) {
-    presupuestoTotal = 99999999999999999;
-  }
-  let presupuestoProg = 0;
-  //Recalculamos el precio total
-  for (let i = 0; i < carrito.length; i++) {
-    presupuestoProg += diccionarioPrecios[carrito[i]];
-  }
-  presupuestoRemaining = presupuestoTotal - presupuestoProg;
-  console.log("The budget is:", presupuestoTotal)
 
-};
 //####################################################################################################################
 //############################################# Barra Nutricional#####################################################
 //####################################################################################################################
@@ -249,7 +232,7 @@ const progresImage = (value, op) => {
 // Obtener el botón y el área de transcripción del DOM
 const startButton = document.getElementById('startButton');
 //const transcriptionDiv = document.getElementById('transcription');
-const transformarCodigo = { "abc12": "Tomate", "a": "Leche", "b": "Cereales"}
+const transformarCodigo = { "abc12": "Tomate", "a": "Leche", "b": "Cereales" }
 let textoAñadido = ""; // Variable para almacenar el texto añadido
 let productoAñadido = ""; // Variable para almacenar el texto añadido
 let productFinal = ""; // Variable para almacenar el producto final
@@ -290,7 +273,7 @@ if ('webkitSpeechRecognition' in window) {
           console.log("Producto añadido:", productFinal);
           if (productContent.name != undefined) {
             progresImage(productContent.name, 1);
-            
+
           }
         }
         interimTranscript += finalTranscript;

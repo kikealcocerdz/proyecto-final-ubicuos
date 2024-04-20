@@ -14,9 +14,14 @@
       <div class="lista-container" id="product-list">
         <!-- La lista de productos se agregará aquí -->
       </div>
-      <form id="budget-container">
-        <button type="value" id="budget-input" placeholder="Enter a budget"></button>
+      <form id="budget-form">
+        <input type="number" id="budget-input" placeholder="Enter a budget" />
+        <button type="button" onclick="submitBudget()">Submit</button>
       </form>
+      <div id="budget-display" style="display: none">
+        <h3>Your Budget:</h3>
+        <p id="budget-value"></p>
+      </div>
       <form id="list-form">
         <input type="text" id="list-input" placeholder="Enter a product" />
         <button type="submit" onclick="submitProduct(event)">AÑADIR</button>
@@ -34,31 +39,25 @@
       const form = document.getElementById("list-form");
       const input = document.getElementById("list-input");
       const productListContainer = document.getElementById("product-list");
-      // Función para agregar un producto a la lista en el cliente
-      // Enviar un mensaje al servidor cuando se envía el formulario
+
       function submitProduct(event) {
         event.preventDefault();
         if (input.value.trim() !== "") {
           const product = input.value.trim().toUpperCase();
-          const productContent = addProduct(product); // Llama a addProduct para obtener el objeto productContent
-          console.log("Añadiendo producto:", productContent);
-          socket.emit("product added", productContent); // Envía el objeto productContent al servidor
-          console.log("Enviando producto al servidor:", productContent);
+          const productContent = addProduct(product);
+          socket.emit("product added", productContent);
         }
       }
 
-      // Función para agregar un producto a la lista en el cliente
       function addProduct(productName) {
-        // Crear el objeto productContent
         const productContent = {
           name: productName,
-          imageUrl: "", // Esta será la URL de la imagen
-          price: "$5.99 / lb", // Puedes establecer el precio predeterminado o dejarlo vacío
-          totalPrice: 5.99, // Puedes establecer el precio total predeterminado o dejarlo vacío
-          isFavorite: false, // Puedes establecer el valor predeterminado de isFavorite
+          imageUrl: "",
+          price: "$5.99 / lb",
+          totalPrice: 5.99,
+          isFavorite: false,
         };
 
-        // Crear elementos HTML para el producto
         const item = document.createElement("div");
         item.classList.add("item-lista");
         const img = document.createElement("img");
@@ -67,34 +66,29 @@
         img.height = 100;
         item.appendChild(img);
         const p = document.createElement("p");
-        p.textContent = productName.name; // Mostrar el nombre del producto
+        p.textContent = productName;
         item.appendChild(p);
         productListContainer.appendChild(item);
 
-        // Realizar búsqueda de imágenes en Google y establecer la primera imagen como imagen del producto
         searchImage(productName)
           .then((imageUrl) => {
             if (imageUrl) {
               img.src = imageUrl;
-              // Actualizar el objeto productContent con la URL de la imagen
               productContent.imageUrl = imageUrl;
             } else {
-              img.src = "https://via.placeholder.com/100"; // Si no se encuentra ninguna imagen, muestra un marcador de posición
+              img.src = "https://via.placeholder.com/100";
             }
           })
           .catch((error) => {
             console.error("Error al buscar imagen:", error);
-            img.src = "https://via.placeholder.com/100"; // En caso de error, muestra un marcador de posición
+            img.src = "https://via.placeholder.com/100";
           });
 
-        // Limpiar el campo de entrada después de agregar el producto
         input.value = "";
 
-        // Retornar el objeto productContent
         return productContent;
       }
 
-      // Función para realizar una búsqueda de imágenes en Google
       async function searchImage(query) {
         const apiKey = "AIzaSyAafRWOvQCkLrS8h0OIZBufu71PqVTBzEg";
         const cxId = "d4b0870a6d6414dde";
@@ -116,38 +110,45 @@
         }
       }
 
-      // Solicitar la lista de productos al servidor cuando se carga la página
       window.onload = function () {
         socket.emit("get product list");
-        console.log("Solicitando lista de productos al servidor...");
-        // Manejar la respuesta del servidor con la lista de productos
         socket.on("product list", function (productList) {
-          console.log("Lista de productos recibida:", productList);
-          // Limpiar la lista actual de productos en el cliente
           productListContainer.innerHTML = "";
-          // Agregar cada producto de la lista recibida al cliente
           productList.forEach(function (productName) {
             addProduct(productName);
           });
         });
       };
 
-      // Otras funciones de tu aplicación...
+      function submitBudget() {
+        const budgetInput = document.getElementById("budget-input");
+        const budgetDisplay = document.getElementById("budget-display");
+        const budgetValue = document.getElementById("budget-value");
+        const budget = budgetInput.value.trim();
 
-      function startDictation() {
-        var recognition = new webkitSpeechRecognition() || SpeechRecognition();
-        recognition.lang = "es-ES";
-        recognition.start();
-        recognition.onresult = function (event) {
-          if (event.results.length > 0) {
-            var result = event.results[0];
-            if (result.isFinal) {
-              var transcript = result[0].transcript;
-              input.value = transcript;
-            }
-          }
-        };
+        if (budget !== "") {
+          budgetValue.textContent = budget;
+          budgetDisplay.style.display = "block";
+          budgetInput.style.display = "none";
+        }
       }
+    </script>
+    <script>
+      const diccionarioPrecio = { Tomate: 2, Leche: 3, Cereales: 1 };
+      let presupuestoTotal = document.getElementById("budget-input").value;
+      let presupuestoRemaining = 0;
+
+      const progresPresupuesto = () => {
+        let presupuestoTotal = document.getElementById("budget-input").value;
+        if (presupuestoTotal == undefined) {
+          presupuestoTotal = 99999999999999999;
+        }
+        let presupuestoProg = 0;
+        for (let i = 0; i < carrito.length; i++) {
+          presupuestoProg += diccionarioPrecios[carrito[i]];
+        }
+        presupuestoRemaining = presupuestoTotal - presupuestoProg;
+      };
     </script>
   </body>
 </html>

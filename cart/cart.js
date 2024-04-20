@@ -67,15 +67,13 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
               console.log("The device has been rotated 90 degrees.");
               console.log("Product to be deleted:", selected);
-              socketDelete.on("product delete voice", function (selected) {
+              socketDelete.emit("product delete voice", function (selected) {
                 console.log("Lista de productos:", productListAdded);
                 console.log("Podructo a eliminar:", selected);
-                productListAdded.pop(selected);
                 console.log(
                   "Lista de productos después de eliminar:",
                   productListAdded
                 );
-                io.emit("product list added", productListAdded);
               });
             }
           }
@@ -101,8 +99,8 @@ function handleShake(event) {
 
     const accelerationMagnitude = Math.sqrt(
       accelerationX * accelerationX +
-        accelerationY * accelerationY +
-        accelerationZ * accelerationZ
+      accelerationY * accelerationY +
+      accelerationZ * accelerationZ
     );
 
     const shakeThreshold = 15;
