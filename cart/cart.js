@@ -1,5 +1,6 @@
 //####################################################################################################################
 //############################################## Eliminar Producto ###################################################
+//####################################################################################################################
 var socketDelete = io(); // Conecta al mismo servidor que el archivo server.html
 var socket = io(); // Conecta al mismo servidor que el archivo server.html
 const cartItems = [
@@ -9,11 +10,11 @@ const cartItems = [
   "product-description",
   "button",
 ];
+const star = "-star";
 let productsAll = document.querySelectorAll(".lista-container");
 const popup = document.getElementById("popup");
 const productListContainer = document.getElementById("product-list");
-const productListContainerRest =
-  document.getElementById("product-list-rest");
+const productListContainerRest = document.getElementById("product-list-rest");
 
 // Si un elemento de la lista de productos se mantiene seleccionado y el dispositivo es girado 180 grados, eliminar el producto
 document.addEventListener("DOMContentLoaded", function () {
@@ -54,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
     totalPrice.textContent = productName.totalPrice;
 
     const favimage = document.createElement("img");
+    favimage.id = productName.name + "-star";
+    favimage.classList.add("fav-image");
     favimage.src = productName.isFavorite
       ? "../public/star-filled.png"
       : "../public/star-unfilled.png";
@@ -89,11 +92,13 @@ document.addEventListener("DOMContentLoaded", function () {
     productListContainerRest.appendChild(item);
   }
 
-
   productsAll.forEach((product) => {
     product.addEventListener("touchstart", (event) => {
       console.log(event.target.className);
-      if (cartItems.includes(event.target.className)) {
+      if (
+        cartItems.includes(event.target.className) &&
+        !event.target.id.includes(star)
+      ) {
         event.preventDefault();
         let touchMoved = false;
         console.log("Evento touchstar: ", event.target);
@@ -112,6 +117,8 @@ document.addEventListener("DOMContentLoaded", function () {
             selected.style.backgroundColor = "#da692afa";
           }
         }, 100);
+      } else if (event.target.id.includes(star)) {
+        event.target.addEventListener("click", favorite(event));
       }
     });
   });
@@ -135,10 +142,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const rotationDifferenceAlpha = Math.abs(
         event.alpha - initialRotation.alpha
       );
-      if (
-        rotationDifferenceAlpha > 90 &&
-        rotationDifferenceAlpha < 120.5
-      ) {
+      if (rotationDifferenceAlpha > 90 && rotationDifferenceAlpha < 120.5) {
         console.log("The device has been rotated 90 degrees.");
         console.log("Product to be deleted:", selected);
         console.log("Lista de productos:", productsArrayDeleted);
@@ -146,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Vibrar solo en respuesta a la sacudida
         if (navigator.vibrate) {
           navigator.vibrate(2000);
-        };
+        }
         console.log("Producto seleccionado:", selected);
         const index = productsArrayDeleted.indexOf(selected); // Encuentra el índice del elemento seleccionado
         console.log("Index del producto a eliminar:", index);
@@ -157,7 +161,10 @@ document.addEventListener("DOMContentLoaded", function () {
           selected.parentNode.removeChild(selected);
           // Emitir el nombre del producto eliminado al servidor
           socketDelete.emit("product deleted voice", selected.id);
-          console.log("Lista de productos después de eliminar:", productsArrayDeleted);
+          console.log(
+            "Lista de productos después de eliminar:",
+            productsArrayDeleted
+          );
         }
       }
     }
@@ -213,8 +220,8 @@ function handleShake(event) {
 
     const accelerationMagnitude = Math.sqrt(
       accelerationX * accelerationX +
-      accelerationY * accelerationY +
-      accelerationZ * accelerationZ
+        accelerationY * accelerationY +
+        accelerationZ * accelerationZ
     );
 
     const shakeThreshold = 15;
@@ -264,5 +271,26 @@ function ordenarLista() {
 window.addEventListener("devicemotion", handleShake);
 
 //####################################################################################################################
-//############################################ Fin Agitar para Ordenar #################################################
+//############################################ Fin Agitar para Ordenar ###############################################
+//####################################################################################################################
+
+//####################################################################################################################
+//############################################### Marcar Favorito ####################################################
+//####################################################################################################################
+function favorite(event) {
+  let favimage = event.target;
+  console.log("item: ", favimage);
+
+  console.log("Producto es favorito? ", favimage.alt);
+
+  if (favimage.src === "http://localhost:3000/public/star-unfilled.png") {
+    favimage.src = "http://localhost:3000/public/star-filled.png";
+    favimage.alt = true;
+  } else {
+    favimage.src = "http://localhost:3000/public/star-unfilled.png";
+    favimage.alt = false;
+  }
+}
+//####################################################################################################################
+//############################################# Fin marcar Favorito ##################################################
 //####################################################################################################################
