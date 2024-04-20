@@ -1,6 +1,50 @@
 var orient = 0;
 var cercanos = 0;
 const diccionario = { 'abc12': 'Tomate', 'def34': 'Lechuga' }
+var socket = io();
+
+// Creamos un objeto para almacenar las URLs de las imágenes de los productos
+const productImageUrls = {};
+
+async function searchImage(query) {
+  const apiKey = "AIzaSyAafRWOvQCkLrS8h0OIZBufu71PqVTBzEg";
+  const cxId = "d4b0870a6d6414dde";
+  const numResults = 1;
+
+  const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cxId}&q=${query}&num=${numResults}&searchType=image`;
+
+  try {
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    if (data.items && data.items.length > 0) {
+      return data.items[0].link;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error al buscar imagen:", error);
+    return null;
+  }
+}
+
+const getProductImageUrl = (() => {
+  let timeout;
+  return async (productName) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(async () => {
+      // Verificamos si ya tenemos la URL de la imagen en cache
+      if (productImageUrls[productName]) {
+        return productImageUrls[productName];
+      }
+
+      // Si no está en cache, llamamos a la función de búsqueda de imágenes
+      const imageUrl = await searchImage(productName);
+      // Almacenamos la URL en cache para futuras referencias
+      productImageUrls[productName] = imageUrl;
+      return imageUrl;
+    }, 2500); // Tiempo de espera en milisegundos antes de ejecutar la búsqueda
+  };
+})();
 
 
 if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
@@ -116,7 +160,65 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
       }
     }
 
+    // Función para renderizar los productos en la sección "near-products"
+    function renderProducts(productList) {
+      const nearProductsContainer = document.getElementById("near-products");
+      nearProductsContainer.innerHTML = ""; // Limpiar la sección antes de renderizar
 
+      productList.forEach((product) => {
+        const productDiv = document.createElement("div");
+        productDiv.classList.add("product");
+
+        const productImg = document.createElement("img");
+        productImg.alt = product.name;
+
+        // Obtener la URL de la imagen del producto
+        getProductImageUrl(product.name)
+          .then((imageUrl) => {
+            if (imageUrl) {
+              productImg.src = imageUrl;
+            } else {
+              productImg.src = "https://via.placeholder.com/100"; // Si no se encuentra ninguna imagen, muestra un marcador de posición
+            }
+          })
+          .catch((error) => {
+            console.error("Error al buscar imagen:", error);
+            productImg.src = "https://via.placeholder.com/100"; // En caso de error, muestra un marcador de posición
+          });
+        console.log("urls", productImageUrls)
+        const productName = document.createElement("p");
+        productName.textContent = product.name;
+        productDiv.id = productName.textContent;
+        productDiv.appendChild(productImg);
+        productDiv.appendChild(productName);
+        if (product.location === cercanos) {
+          nearProductsContainer.appendChild(productDiv);
+        }
+      });
+    }
+    // Escuchar la lista de productos desde el servidor
+    socket.on("product list", function (productList) {
+      console.log(productList);
+      console.log("Productos recibidos");
+      renderProducts(productList);
+    });
+
+    // Función para realizar una solicitud GET al endpoint /product-list
+    function getProductList() {
+      fetch("/product-list")
+        .then((response) => response.json())
+        .then((productList) => {
+          console.log(productList);
+          console.log("Productos recibidos");
+          renderProducts(productList);
+        })
+        .catch((error) =>
+          console.error("Error al obtener la lista de productos:", error)
+        );
+    }
+
+    // Llamar a la función para obtener la lista de productos cuando se carga la página
+    getProductList();
 
 
     //Funcion para mostrar el mapa con progreso
@@ -183,7 +285,6 @@ let valorNutricional = 0;
 const progresImage = (value, op) => {
   let PesoNutricional = 0;
   const imageContainer = document.getElementById("image-container");
-  let imageUrl = "";
   console.log("El valor del producto es:", value);
   //Añadimos o eliminamos en el carrito local el producto en cuestion
   if (op == 1) {
@@ -199,26 +300,20 @@ const progresImage = (value, op) => {
   //Definimos el valor de la variable 
   valorNutricional = (PesoNutricional / carrito.length);
   // Dependiendo del valor de la variable, selecciona la imagen correspondiente
-  imageUrl = "";
+  imageContainer.src = "";
   if (carrito.length === 0) {
-    imageUrl = "";
+    imageContainer.src = "";
   } else if (valorNutricional > 1 && valorNutricional <= 2) {
-    imageUrl = "../public/mapa-images/fase1.png";
+    imageContainer.src = "../public/mapa-images/fase1.png";
   } else if (valorNutricional > 2 && valorNutricional <= 3) {
-    imageUrl = "../public/mapa-images/fase2.png";
+    imageContainer.src = "../public/mapa-images/fase2.png";
   } else if (valorNutricional > 3 && valorNutricional <= 4) {
-    imageUrl = "../public/mapa-images/fase3.png";
+    imageContainer.src = "../public/mapa-images/fase3.png";
   } else if (valorNutricional > 4 && valorNutricional < 5) {
-    imageUrl = "../public/mapa-images/fase5.png";
+    imageContainer.src = "../public/mapa-images/fase5.png";
   } else if (valorNutricional == 5) {
-    imageUrl = "../public/mapa-images/fase5.png";
+    imageContainer.src = "../public/mapa-images/fase5.png";
   }
-
-  // Rellena el div con la imagen seleccionada
-  let imageProgress = document.createElement("img");
-  imageProgress.src = imageUrl;
-  imageContainer.appendChild(imageProgress);
-
 };
 //####################################################################################################################
 //############################################# Fin Barra Nutricional ################################################

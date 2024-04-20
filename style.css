@@ -265,19 +265,38 @@ footer {
 }
 
 .popup {
+  display: none;
   position: fixed;
-  top: 50%;
+  z-index: 1;
   left: 50%;
+  top: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
+  background-color: #fff;
+  border: 1px solid #ddd;
   padding: 20px;
-  border: 1px solid #ccc;
-  z-index: 9999;
+  width: 90%;
+  max-height: 80%;
+  overflow: auto;
 }
 
-.popup {
-  display: none;
+.popup p {
+  margin-bottom: 15px;
 }
+
+.cerrar-popup {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.cerrar-popup:hover,
+.cerrar-popup:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 
 .product-lista{
   width: 100%;
@@ -358,8 +377,16 @@ footer {
 }
 
 #image-container {
-  width: 30%;
-  height: 50%;
+  width: 15%;
+  height: 30%;
+  margin: 10px;
+}
+
+#image-container-2{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
 }
 
 .qr-button {

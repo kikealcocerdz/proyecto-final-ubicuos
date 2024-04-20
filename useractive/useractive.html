@@ -30,9 +30,11 @@
             alt="Example Image"
           />
           <div id="arrow"></div>
-          <div id="compass"></div>
+          <div style="display: none" id="compass"></div>
         </div>
-        <div id="image-container"></div>
+        <div id="image-container-2">
+          <img id="image-container" src="../public/mapa-images/fase5.png" />
+        </div>
       </div>
       <h3 class="section-title">Productos cercanos</h3>
       <div class="near-products" id="near-products"></div>
@@ -51,87 +53,7 @@
       </div>
     </footer>
 
-    <script>
-      var socket = io();
-      async function searchImage(query) {
-        const apiKey = "AIzaSyAafRWOvQCkLrS8h0OIZBufu71PqVTBzEg";
-        const cxId = "d4b0870a6d6414dde";
-        const numResults = 1;
-
-        const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${apiKey}&cx=${cxId}&q=${query}&num=${numResults}&searchType=image`;
-
-        try {
-          const response = await fetch(apiUrl);
-          const data = await response.json();
-          if (data.items && data.items.length > 0) {
-            return data.items[0].link;
-          } else {
-            return null;
-          }
-        } catch (error) {
-          console.error("Error al buscar imagen:", error);
-          return null;
-        }
-      }
-      // Función para renderizar los productos en la sección "near-products"
-      function renderProducts(productList) {
-        const nearProductsContainer = document.getElementById("near-products");
-        nearProductsContainer.innerHTML = ""; // Limpiar la sección antes de renderizar
-
-        productList.forEach((product) => {
-          const productDiv = document.createElement("div");
-          productDiv.classList.add("product");
-
-          const productImg = document.createElement("img");
-          productImg.alt = product.name;
-
-          searchImage(product.name) // Cambiar productName por product.name
-            .then((imageUrl) => {
-              if (imageUrl) {
-                productImg.src = imageUrl;
-              } else {
-                productImg.src = "https://via.placeholder.com/100"; // Si no se encuentra ninguna imagen, muestra un marcador de posición
-              }
-            })
-            .catch((error) => {
-              console.error("Error al buscar imagen:", error);
-              productImg.src = "https://via.placeholder.com/100"; // En caso de error, muestra un marcador de posición
-            });
-
-          const productName = document.createElement("p");
-          productName.textContent = product.name;
-          productDiv.id = productName.textContent;
-          productDiv.appendChild(productImg);
-          productDiv.appendChild(productName);
-
-          nearProductsContainer.appendChild(productDiv);
-        });
-      }
-
-      // Función para realizar una solicitud GET al endpoint /product-list
-      function getProductList() {
-        fetch("/product-list")
-          .then((response) => response.json())
-          .then((productList) => {
-            console.log(productList);
-            console.log("Productos recibidos");
-            renderProducts(productList);
-          })
-          .catch((error) =>
-            console.error("Error al obtener la lista de productos:", error)
-          );
-      }
-
-      // Llamar a la función para obtener la lista de productos cuando se carga la página
-      getProductList();
-
-      // Escuchar la lista de productos desde el servidor
-      socket.on("product list", function (productList) {
-        console.log(productList);
-        console.log("Productos recibidos");
-        renderProducts(productList);
-      });
-    </script>
+    <script></script>
     <script src="../mapa/funcionmapa.js"></script>
   </body>
 </html>

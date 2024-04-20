@@ -4,24 +4,67 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
     <title>easySHOP</title>
     <link rel="stylesheet" href="/style.css" />
-    <a href="/informacion.html" class="link-nextstep">?</a>
   </head>
   <body>
     <header>
       <a href="/" class="shop-title">easySHOP</a>
+      <a href="/informacion.html" class="link-nextstep">
+        <img width="30px" src="public/info-icon.svg" />
+      </a>
+      <div id="popup-instrucciones" class="popup">
+        <span class="cerrar-popup" onclick="cerrarPopup()">&times;</span>
+
+        <div id="instruciones-añadir">
+          <b>Añadiendo productos a la lista de compra</b>
+          <p>
+            Para añadir productos a su lista de compras debes pulsar el "plus"
+            blanco en la pantalla de empezar compra. Cada producto tiene su
+            propio código, y cuando lo pulsas puedes decir "añadir" y el código
+            del producto (por ejemplo, para añadir las tomates puedes decir
+            "añadir ABC12").
+          </p>
+        </div>
+        <div id="instruciones-eliminar">
+          <b>Eliminando productos de la lista de compra</b>
+          <p>
+            Para eliminar un producto solo tienes que girar tu dispositivo móvil
+            180 grados mientras tocas el producto que quieres eliminar.
+          </p>
+        </div>
+        <div id="instruciones-marcar-favorito">
+          <b>Marcando productos como favorito</b>
+          <p>
+            Para marcar un producto como favorito, pulsa la estrella que está en
+            el producto.
+          </p>
+        </div>
+      </div>
     </header>
     <section class="shop-container">
       <h3 style="color: white">LISTA ACTUAL</h3>
       <div class="lista-container" id="product-list">
         <!-- La lista de productos se agregará aquí -->
       </div>
-      <form id="budget-form">
-        <input type="number" id="budget-input" placeholder="Enter a budget" />
-        <button type="button" onclick="submitBudget()">Submit</button>
+      <form
+        id="budget-form"
+        class="list-form"
+        style="color: white; padding: 20px"
+      >
+        <input
+          type="number"
+          id="budget-input"
+          placeholder="Añade tu presupuesto"
+          onkeydown="return event.key != 'Enter';"
+        />
+        <button type="button" id="presupuesto-button" onclick="submitBudget()">
+          AÑADIR PRESUPUESTO
+        </button>
       </form>
-      <div id="budget-display" style="display: none">
-        <h3>Your Budget:</h3>
-        <p id="budget-value"></p>
+      <div
+        id="budget-display"
+        style="display: none; color: white; padding: 20px"
+      >
+        <h3>Presupuesto para la compra: <span id="budget-value"></span>€</h3>
       </div>
       <form id="list-form">
         <input type="text" id="list-input" placeholder="Enter a product" />
@@ -31,6 +74,18 @@
     </section>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      document
+        .querySelector(".link-nextstep")
+        .addEventListener("click", function (event) {
+          event.preventDefault();
+          document.getElementById("popup-instrucciones").style.display =
+            "block";
+        });
+
+      function cerrarPopup() {
+        document.getElementById("popup-instrucciones").style.display = "none";
+      }
+
       const socket = io(); // Conecta al mismo servidor que el archivo server.html
 
       const form = document.getElementById("list-form");
@@ -47,13 +102,30 @@
       }
 
       function addProduct(productName) {
+        console.log("Añadiendo producto:", productName);
         const productContent = {
           name: productName,
           imageUrl: "",
           price: "$5.99 / lb",
           totalPrice: 5.99,
           isFavorite: false,
+          location: 1,
         };
+
+        if (productName === "TOMATE") {
+          console.log("Tomate");
+          productContent.price = "$2.99 / lb";
+          productContent.totalPrice = 2.99;
+          productContent.location = 2;
+        } else if (productName === "LECHE") {
+          productContent.price = "$3.99 / gal";
+          productContent.totalPrice = 3.99;
+          productContent.location = 3;
+        } else if (productName === "CEREALES") {
+          productContent.price = "$1.99 / box";
+          productContent.totalPrice = 1.99;
+          productContent.location = 1;
+        }
 
         const item = document.createElement("div");
         item.classList.add("item-lista");
@@ -121,11 +193,13 @@
         const budgetInput = document.getElementById("budget-input");
         const budgetDisplay = document.getElementById("budget-display");
         const budgetValue = document.getElementById("budget-value");
+        const buttonBudget = document.getElementById("presupuesto-button");
         const budget = budgetInput.value.trim();
 
         if (budget !== "") {
           budgetValue.textContent = budget;
           budgetDisplay.style.display = "block";
+          buttonBudget.style.display = "none";
           budgetInput.style.display = "none";
         }
       }
