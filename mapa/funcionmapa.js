@@ -141,29 +141,29 @@ if ('DeviceMotionEvent' in window && 'DeviceOrientationEvent' in window) {
     console.log("El mapa actual es:", fotomapa);
     if (fotomapa == 0) {
       console.log("Primer mapa");
-      map.src = "./mapa/mapa-images/mapa1.png";
+      map.src = "../public/mapa-images/mapa1.png";
     }
     else if (fotomapa == 1) {
       console.log("Segundo mapa");
-      map.src = "./mapa/mapa-images/mapa2.png";
+      map.src = "../public/mapa-images/mapa2.png";
     }
     else if (fotomapa == 2) {
       console.log("Tercer mapa");
-      map.src = "./mapa/mapa-images/mapa3.png";
+      map.src = "../public/mapa-images/mapa3.png";
     }
     else if (fotomapa == 3) {
       console.log("Cuarto mapa");
-      map.src = "./mapa/mapa-images/mapa4.png";
+      map.src = "../public/mapa-images/mapa4.png";
     }
     else if (fotomapa == 4) {
-      map.src = "./mapa/mapa-images/mapa5.png";
+      map.src = "../public/mapa-images/mapa5.png";
       console.log("Quinto mapa");
     }
     else if (fotomapa == 5) {
       console.log("Sexto mapa");
-      map.src = "./mapa/mapa-images/mapa6.png";
+      map.src = "../public/mapa-images/mapa6.png";
     }
-    else { map.src = "./mapa/mapa-images/mapaoriginal.png"; }
+    else { map.src = "../public/mapa-images/mapaoriginal.png"; }
     console.log("la posicion del puntero es:", currentX, currentY);
     console.log("Cercanos:", cercanos);
   }
@@ -203,15 +203,15 @@ const progresImage = (value, op) => {
   if (carrito.length === 0) {
     imageUrl = "";
   } else if (valorNutricional > 1 && valorNutricional <= 2) {
-    imageUrl = "./mapa/mapa-images/fase1.png";
+    imageUrl = "../public/mapa-images/fase1.png";
   } else if (valorNutricional > 2 && valorNutricional <= 3) {
-    imageUrl = "./mapa/mapa-images/fase2.png";
+    imageUrl = "../public/mapa-images/fase2.png";
   } else if (valorNutricional > 3 && valorNutricional <= 4) {
-    imageUrl = "./mapa/mapa-images/fase3.png";
+    imageUrl = "../public/mapa-images/fase3.png";
   } else if (valorNutricional > 4 && valorNutricional < 5) {
-    imageUrl = "./mapa/mapa-images/fase5.png";
+    imageUrl = "../public/mapa-images/fase5.png";
   } else if (valorNutricional == 5) {
-    imageUrl = "./mapa/mapa-images/fase5.png";
+    imageUrl = "../public/mapa-images/fase5.png";
   }
 
   // Rellena el div con la imagen seleccionada
@@ -219,7 +219,6 @@ const progresImage = (value, op) => {
   imageProgress.src = imageUrl;
   imageContainer.appendChild(imageProgress);
 
-  progresPresupuesto();
 };
 //####################################################################################################################
 //############################################# Fin Barra Nutricional ################################################

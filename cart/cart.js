@@ -121,7 +121,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Convertir la lista de nodos a un array para poder ordenarla
     let productsArrayDeleted = Array.from(productsDeleted);
-    console.log(productsArrayDeleted[0].id);
     let initialRotation = {
       alpha: 0,
       beta: 90,
@@ -156,6 +155,8 @@ document.addEventListener("DOMContentLoaded", function () {
           productsArrayDeleted.splice(index, 1);
           // Elimina el elemento del DOM
           selected.parentNode.removeChild(selected);
+          // Emitir el nombre del producto eliminado al servidor
+          socketDelete.emit("product deleted voice", selected.id);
           console.log("Lista de productos después de eliminar:", productsArrayDeleted);
         }
       }

@@ -48,7 +48,9 @@ io.on("connection", (socket) => {
   // Eliminar un producto específico de productListAddedd
   socket.on("product deleted voice", (productName) => {
     console.log("Producto a eliminar name:", productName);
-    const index = productListAdded.indexOf(productName);
+    const index = productListAdded.name.indexOf(productName);
+    console.log("Index:", index);
+    console.log("Current product list sonido:", productListAdded);
     if (index !== -1) {
       productListAdded.splice(index, 1);
     }
