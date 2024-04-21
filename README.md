@@ -46,6 +46,8 @@ Seguidamente, en un navegador web se puede acceder a la dirección <http://local
 
 En la aplicación y más en concreto en la página principal, existe la opción de acceder a un "manual" de uso de la aplicación, que se encuentra en la esquina superior derecha de la página con un icono de `i` en un círculo. Al hacer clic, se abrirá una ventana emergente con información sobre cómo utilizar la aplicación.
 
+Damos la opción de introducir un presupuesto, pero sin embargo no se ha implementado la funcionalidad de la comprobación del presupuesto (y su consecuente aviso/interacción con el usuario), debido a que hemos contemplado que para el prototipado no entraría en el alcance.
+
 Para la última parte, correspondiente al pago, en la parte del cliente, tras pulsar `finalizar compra`, se redirigirá a la página `pagofinal.html` donde se podrá realizar el pago tras escaner un código QR que se genera en el cajero.
 
 En el lado del servidor (el cajero), se redirigirá a la página `cajero.html` donde se muestran los productos y el precio total de la compra, debajo hay un botón para generar el código QR, que tras pulsarlo se generará el código QR que se debe escanear desde la página del cliente.
@@ -54,6 +56,8 @@ Finalmente en el lado del cliente, tras escanear el código QR, se tendrán dos 
 
 - Realizar el pago, redirigiendo a una página de PayPal.
 - Comprar de nuevo, redirigiendo a la página principal de la aplicación.
+
+---
 
 ### Ejecución cliente remoto
 
