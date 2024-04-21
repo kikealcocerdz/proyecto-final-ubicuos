@@ -1,6 +1,5 @@
 var orient = 0;
 var cercanos = 0;
-const diccionario = { TO24: "Tomate", LC23: "Leche", CR48: "Cereales", DN96: "Donuts", PN69: "Pan" };
 var socket = io();
 
 // Creamos un objeto para almacenar las URLs de las imágenes de los productos
@@ -48,7 +47,7 @@ const getProductImageUrl = (() => {
 
 if ("DeviceMotionEvent" in window && "DeviceOrientationEvent" in window) {
   window.addEventListener("deviceorientation", handleOrientation);
-  window.addEventListener("deviceorientation", handleMotion);
+  window.addEventListener("devicemotion", handleMotion);
   //####################################################################################################################
   //############################################# Flecha Del Mapa ######################################################
   //####################################################################################################################
@@ -92,14 +91,13 @@ if ("DeviceMotionEvent" in window && "DeviceOrientationEvent" in window) {
 
   function handleMotion(event) {
     var arrow = document.getElementById("arrow");
-    var accelerationX = 10;
-
+    var accelerationX = Math.abs(event.acceleration.y);
     var compass = document.getElementById("compass");
     compass.innerHTML =
       "Aceleración en x: " + accelerationX + "newX: " + newX + "newY: " + newY;
 
     // Velocidad de movimiento en píxeles por segundoS
-    var speed = 0.1;
+    var speed = 0.3;
 
     // Calcula el cambio en la posición de la flecha
     var mover = accelerationX * speed;
@@ -295,9 +293,10 @@ const progresImage = (value, op) => {
   for (let i = 0; i < carrito.length; i++) {
     PesoNutricional += diccionarioNutricional[carrito[i]];
   }
-
+  
   //Definimos el valor de la variable
   valorNutricional = PesoNutricional / carrito.length;
+  console.log("El valor nutricional es:", valorNutricional);
   // Dependiendo del valor de la variable, selecciona la imagen correspondiente
   imageContainer.src = "";
   if (carrito.length === 0) {
