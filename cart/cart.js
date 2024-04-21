@@ -29,10 +29,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const button = document.createElement("button");
     button.classList.add("product-lista");
-    button.onclick = function () {
-      // Muestra el popup al hacer clic en un producto
-      popup.style.display = "block";
-    };
 
     const img = document.createElement("img");
     img.classList.add("product-image");
@@ -197,12 +193,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   };
 
-  // Oculta el popup al hacer clic o tocar en cualquier parte fuera del mismo
-  document.addEventListener("click", function (event) {
-    if (event.target !== popup) {
-      popup.style.display = "none";
-    }
-  });
 });
 //####################################################################################################################
 //############################################ Fin Eliminar Producto #################################################
@@ -278,24 +268,60 @@ window.addEventListener("devicemotion", handleShake);
 //############################################### Marcar Favorito ####################################################
 //####################################################################################################################
 function favorite(event) {
-  let favimage = event.target;
-  console.log("item: ", favimage);
+  if ("webkitSpeechRecognition" in window) {
+    // Crear un nuevo objeto de reconocimiento de voz
+    const recognition = new webkitSpeechRecognition();
+    console.log("Reconocimiento de voz creado");
+    let interimTranscript ="";
+    // Configurar opciones del reconocimiento
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "es-ES"; // Idioma español
+    recognition.start();
+    setTimeout(() => {recognition.stop();
+      console.log("Reconocimiento de voz detenido");
+    }, 5000);
+    // Cuando se detecta un resultado parcial
+    recognition.onresult = function (evento) {
+      for (let i = evento.resultIndex; i < evento.results.length; ++i) {
+        if (evento.results[i].isFinal) {
+          const finalTranscript = evento.results[i][0].transcript;
+          console.log("Texto reconocido:", finalTranscript);
+          // Verificar si el texto contiene la palabra "añadir"
+          if (finalTranscript.toLowerCase().includes("favorito")) {
+            console.log("Se ha dicho favorito");
+            
+            let favimage = event.target;
+            console.log("item: ", favimage);
 
-  console.log("Producto es favorito? ", favimage.alt);
+            console.log("Producto es favorito? ", favimage.alt);
 
-  let currentWeb = new URL(window.location.href);
-  let origin = currentWeb.origin;
-  let starFilled = origin + "/public/star-filled.png";
-  let starUnfilled = origin + "/public/star-unfilled.png";
+            let currentWeb = new URL(window.location.href);
+            let origin = currentWeb.origin;
+            let starFilled = origin + "/public/star-filled.png";
+            let starUnfilled = origin + "/public/star-unfilled.png";
 
-  if (favimage.src === starUnfilled) {
-    favimage.src = starFilled;
-    favimage.alt = true;
-  } else {
-    favimage.src = starUnfilled;
-    favimage.alt = false;
+            if (favimage.src === starUnfilled) {
+              favimage.src = starFilled;
+              favimage.alt = true;
+            } else {
+              favimage.src = starUnfilled;
+              favimage.alt = false;
+            }
+          }
+          interimTranscript += finalTranscript;
+      } else {
+        interimTranscript += evento.results[i][0].transcript;
+      }
+    }
+    console.log("Texto transcripción:", interimTranscript);
+        }
+        }
   }
-}
+  
 //####################################################################################################################
 //############################################# Fin marcar Favorito ##################################################
 //####################################################################################################################
+
+
+

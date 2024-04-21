@@ -324,7 +324,7 @@ const progresImage = (value, op) => {
 // Obtener el botón y el área de transcripción del DOM
 const startButton = document.getElementById("startButton");
 //const transcriptionDiv = document.getElementById('transcription');
-const transformarCodigo = { TO24: "Tomate", LC23: "Leche", CR48: "Cereales", DN96: "Donuts", PN69: "Pan" };
+const transformarCodigo = { "to24": "Tomate", "lc23": "Leche", "cr48": "Cereales", "dn96": "Donuts", "pn69": "Pan" };
 let textoAñadido = ""; // Variable para almacenar el texto añadido
 let productoAñadido = ""; // Variable para almacenar el texto añadido
 let productFinal = ""; // Variable para almacenar el producto final
@@ -353,7 +353,7 @@ if ("webkitSpeechRecognition" in window) {
           productoAñadido = finalTranscript
             .substring(
               finalTranscript.indexOf("añadir") + 6,
-              finalTranscript.indexOf("añadir") + 12
+              finalTranscript.indexOf("añadir") + 11
             )
             .trim();
           console.log("Texto añadido:", productoAñadido);
