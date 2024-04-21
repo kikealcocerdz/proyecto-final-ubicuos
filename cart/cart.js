@@ -283,11 +283,16 @@ function favorite(event) {
 
   console.log("Producto es favorito? ", favimage.alt);
 
-  if (favimage.src === "http://localhost:3000/public/star-unfilled.png") {
-    favimage.src = "http://localhost:3000/public/star-filled.png";
+  let currentWeb = new URL(window.location.href);
+  let origin = currentWeb.origin;
+  let starFilled = origin + "/public/star-filled.png";
+  let starUnfilled = origin + "/public/star-unfilled.png";
+
+  if (favimage.src === starUnfilled) {
+    favimage.src = starFilled;
     favimage.alt = true;
   } else {
-    favimage.src = "http://localhost:3000/public/star-unfilled.png";
+    favimage.src = starUnfilled;
     favimage.alt = false;
   }
 }

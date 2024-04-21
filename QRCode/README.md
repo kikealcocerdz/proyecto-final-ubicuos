@@ -18,4 +18,4 @@ Este bloque de código se encarga de generar un código QR a partir de un valor 
 
 ## Aclaración
 
-El código proporcionado está diseñado para generar un código QR que redirija a la URL `https://paypal.me/kikealcocer?country.x
+El código proporcionado está diseñado para generar un código QR que redirija a la URL `https://paypal.me/kikealcocer?country.x`

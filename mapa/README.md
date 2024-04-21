@@ -1,6 +1,6 @@
 # Documentación de funcionmapa.js
 
-Aquí se describe la funcionalidad implementada en el archivo `funcionmapa.js`. 
+Aquí se describe la funcionalidad implementada en el archivo `funcionmapa.js`.
 Este archivo contiene el código JavaScript que se encarga de mostrar la orientación del dispositivo, la posición de la flecha en el mapa y los productos cercanos en la interfaz de usuario, así como de manejar la barra nutricional y el reconocimiento de voz.
 
 ## Variables Globales
