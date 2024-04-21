@@ -65,14 +65,27 @@
           console.log("Lista de productos recibida por voz:", productListAdded);
           productListAdded.forEach(function (product) {
             console.log("Producto recibido por voz:", product);
-            addProductRest(product); // Llama a addProductRest para agregar el producto
-            totalAmount += product.totalPrice; // Agrega el precio del producto al total
+            let productExists = false;
+            productListContainer
+              .querySelectorAll("li")
+              .forEach(function (item) {
+                if (
+                  item.querySelector("p:first-child").textContent ===
+                  product.name
+                ) {
+                  productExists = true;
+                }
+              });
+            if (!productExists) {
+              addProductRest(product);
+              console.log("Producto añadido:", product.totalPrice);
+              totalAmount += product.totalPrice; // Suma el precio del producto al total
+              // Muestra el total en el contenedor correspondiente
+              totalAmountContainer.textContent = `Total a pagar: $${totalAmount.toFixed(
+                2
+              )}`;
+            }
           });
-
-          // Muestra el total en el contenedor correspondiente
-          totalAmountContainer.textContent = `Total a pagar: $${totalAmount.toFixed(
-            2
-          )}`;
         });
       };
     </script>
