@@ -1,6 +1,6 @@
 var orient = 0;
 var cercanos = 0;
-const diccionario = { abc12: "Tomate", def34: "Lechuga" };
+const diccionario = { TO24: "Tomate", LC23: "Leche", CR48: "Cereales", DN96: "Donuts", PN69: "Pan" };
 var socket = io();
 
 // Creamos un objeto para almacenar las URLs de las imágenes de los productos
@@ -277,7 +277,7 @@ if ("DeviceMotionEvent" in window && "DeviceOrientationEvent" in window) {
 //####################################################################################################################
 //############################################# Barra Nutricional ####################################################
 //####################################################################################################################
-const diccionarioNutricional = { Tomate: 5, Leche: 3, Cereales: 1 };
+const diccionarioNutricional = { Tomate: 5, Leche: 4, Cereales: 2, Donuts: 1, Pan: 3 };
 let carrito = [];
 let valorNutricional = 0;
 
@@ -324,7 +324,7 @@ const progresImage = (value, op) => {
 // Obtener el botón y el área de transcripción del DOM
 const startButton = document.getElementById("startButton");
 //const transcriptionDiv = document.getElementById('transcription');
-const transformarCodigo = { abc12: "Tomate", a: "Leche", b: "Cereales" };
+const transformarCodigo = { TO24: "Tomate", LC23: "Leche", CR48: "Cereales", DN96: "Donuts", PN69: "Pan" };
 let textoAñadido = ""; // Variable para almacenar el texto añadido
 let productoAñadido = ""; // Variable para almacenar el texto añadido
 let productFinal = ""; // Variable para almacenar el producto final

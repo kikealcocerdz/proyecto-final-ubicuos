@@ -38,6 +38,16 @@
             el producto.
           </p>
         </div>
+        <div id="lista-productos">
+          <b>Lista de productos con sus respectivos códigos</b>
+          <ul>
+            <li>Tomate: TO24</li>
+            <li>Leche: LC23<LEg></LEg></li>
+            <li>Cereales: CR48</li>
+            <li>Donuts: DN96</li>
+            <li>Pan: PN69</li>
+          </ul>
+        </div>
       </div>
     </header>
     <section class="shop-container">
@@ -125,6 +135,14 @@
           productContent.price = "$1.99 / box";
           productContent.totalPrice = 1.99;
           productContent.location = 1;
+        } else if (productName === "DONUTS") {
+          productContent.price = "$4.99 / box";
+          productContent.totalPrice = 4.99;
+          productContent.location = 4;
+        } else if (productName === "PAN") {
+          productContent.price = "$2.99 / loaf";
+          productContent.totalPrice = 2.99;
+          productContent.location = 4;
         }
 
         const item = document.createElement("div");
@@ -205,7 +223,13 @@
       }
     </script>
     <script>
-      const diccionarioPrecio = { Tomate: 2, Leche: 3, Cereales: 1 };
+      const diccionarioPrecio = {
+        Tomate: 2,
+        Leche: 3,
+        Cereales: 1,
+        Donuts: 4,
+        Pan: 2,
+      };
       let presupuestoTotal = document.getElementById("budget-input").value;
       let presupuestoRemaining = 0;
 
