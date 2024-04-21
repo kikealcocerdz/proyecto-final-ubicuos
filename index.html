@@ -17,54 +17,73 @@
         <div id="instruciones-añadir">
           <b>Añadir productos a la lista de compra</b>
           <p>
-            Para añadir productos a su lista de compra debes pulsar el boton con un "+"  (<button id="expl-button">+</button>)
-            blanco en la pantalla de empezar compra. Cada producto tiene su
-            propio código, y cuando lo pulsas puedes decir "añadir" y el código
-            del producto (por ejemplo, para añadir los tomates puedes decir "añadir TO24").
+            Para añadir productos a su lista de compra debes pulsar el boton con
+            un "+" (<button id="expl-button">+</button>) blanco en la pantalla
+            de empezar compra. Cada producto tiene su propio código, y cuando lo
+            pulsas puedes decir "añadir" y el código del producto (por ejemplo,
+            para añadir los tomates puedes decir "añadir TO24").
           </p>
         </div>
         <div id="instruciones-eliminar">
           <b>Eliminar productos de la lista de compra</b>
           <p>
             Para eliminar un producto solo tienes que girar tu dispositivo móvil
-            180 grados habiendo seleccionado previamente producto que quieres eliminar 
-            pulsando sobre el(funciona mejor si se pulsa la esquina superior izquierda del producto a seleccionar).
+            180 grados habiendo seleccionado previamente producto que quieres
+            eliminar pulsando sobre el(funciona mejor si se pulsa la esquina
+            superior izquierda del producto a seleccionar).
           </p>
         </div>
         <div id="instruciones-marcar-favorito">
           <b>Marcar productos como favorito</b>
           <p>
-            Para marcar un producto como favorito, simplemente debe pulsar la estrella vacía que está en
-            el producto y decir "favorito". (<img src="public/star-unfilled.png" alt="estrella-vacía">).
-            Para eliminar un producto de favoritos pulsa la estrella completado y decir "favorito"(<img src="public/star-filled.png" alt="estrella-completo">)
+            Para marcar un producto como favorito, simplemente debe pulsar la
+            estrella vacía que está en el producto y decir "favorito". (<img
+              src="public/star-unfilled.png"
+              alt="estrella-vacía"
+            />). Para eliminar un producto de favoritos pulsa la estrella
+            completado y decir "favorito"(<img
+              src="public/star-filled.png"
+              alt="estrella-completo"
+            />)
           </p>
         </div>
         <div id="instruciones-mapa">
           <b>Para usar el mapa </b>
-          <p>En la pagina de la mapa puedes ver las locaciones de los productos en la lista de compras. 
-            Tambien puedes ver su posicion en el supermercado y su direccion.
-            El mapa es interactivo, es decir que te marca la ruta hacia los productos que tienes en la lista(demo) 
-            Ademas la flecha en este te representa en el mapa y se mueve y gira dependiendo de la posicion del movil.
+          <p>
+            En la pagina de la mapa puedes ver las locaciones de los productos
+            en la lista de compras. Tambien puedes ver su posicion en el
+            supermercado y su direccion. El mapa es interactivo, es decir que te
+            marca la ruta hacia los productos que tienes en la lista(demo)
+            Ademas la flecha en este te representa en el mapa y se mueve y gira
+            dependiendo de la posicion del movil.
           </p>
         </div>
         <div id="instruciones-qr">
           <b>Para pagar</b>
-          <p>Cuando has termiado la compra debes tocar <img src="public/finalizar-compra.png" alt="finalizar-compra" width="50" height="20"> que te redireccionara a la pagina final.
-            Debes buscar a la persona responsable en caja que tiene un codigo QR que peudes escanear para pagar. </p>
+          <p>
+            Cuando has termiado la compra debes tocar
+            <img
+              src="public/finalizar-compra.png"
+              alt="finalizar-compra"
+              width="50"
+              height="20"
+            />
+            que te redireccionara a la pagina final. Debes buscar a la persona
+            responsable en caja que tiene un codigo QR que peudes escanear para
+            pagar.
+          </p>
         </div>
         <div id="lista-productos">
           <b>Lista de productos con sus respectivos códigos</b>
           <ul>
             <li>Tomate: TO24</li>
-            <li>Leche: LC23<LEg></LEg></li> 
+            <li>Leche: LC23<LEg></LEg></li>
             <li>Cereales: CR48</li>
             <li>Donuts: DN96</li>
             <li>Pan: PN69</li>
           </ul>
         </div>
-
       </div>
-
     </header>
     <section class="shop-container">
       <h3 style="color: white">LISTA ACTUAL</h3>
@@ -74,15 +93,34 @@
       <form
         id="budget-form"
         class="list-form"
-        style="color: white; padding: 20px"
+        style="
+          color: white;
+          padding: 20px;
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          font-size: 1em;
+        "
       >
         <input
           type="number"
           id="budget-input"
           placeholder="Añade tu presupuesto"
+          style="
+            font-size: 1em;
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+          "
           onkeydown="return event.key != 'Enter';"
         />
-        <button type="button" id="presupuesto-button" onclick="submitBudget()">
+        <button
+          type="button"
+          id="presupuesto-button"
+          class="link-nextstep"
+          style="font-size: 1.1em; padding: 10px 20px; margin-top: 10px"
+          onclick="submitBudget()"
+        >
           AÑADIR PRESUPUESTO
         </button>
       </form>
