@@ -48,12 +48,12 @@ io.on("connection", (socket) => {
   // Eliminar un producto específico de productListAddedd
   socket.on("product deleted voice", (productName) => {
     console.log("Producto a eliminar name:", productName);
-    const index = productListAdded.name.indexOf(productName);
-    console.log("Index:", index);
-    console.log("Current product list sonido:", productListAdded);
-    if (index !== -1) {
-      productListAdded.splice(index, 1);
+    productListAdded.forEach((product, index) => {
+      if (product.name === productName) {
+        productListAdded.splice(index, 1);
+      }
     }
+    );
     console.log("Current product list sonido deleted:", productListAdded);
     io.emit("product list added", productListAdded);
   });
@@ -116,6 +116,7 @@ server.listen(3000, () => {
 io.on("product deleted voice", (productName) => {
   console.log("Producto a eliminar name:", productName);
   const index = productListAdded.indexOf(productName);
+  console.log("Index:", index);
   if (index !== -1) {
     productListAdded.splice(index, 1);
   }
