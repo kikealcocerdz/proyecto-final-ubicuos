@@ -399,9 +399,11 @@ if ("webkitSpeechRecognition" in window) {
     // Comenzar el reconocimiento
     if (empezar == false) {
       recognition.start();
+      startButton.style.backgroundColor = "#4CAF50";
       empezar = true;
     } else {
       recognition.stop();
+      startButton.style.backgroundColor = "rgb(212, 68, 68)";
       empezar = false;
     }
   });

@@ -372,7 +372,7 @@ footer {
   height: 0;
   border-left: 15px solid transparent; /* Lado izquierdo de la flecha */
   border-right: 15px solid transparent; /* Lado derecho de la flecha */
-  border-bottom: 30px solid red; /* Base de la flecha */
+  border-bottom: 30px solid rgb(212, 68, 68); /* Base de la flecha */
   transform-origin: bottom center;
 }
 
