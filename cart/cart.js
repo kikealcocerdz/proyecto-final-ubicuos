@@ -219,7 +219,7 @@ function handleShake(event) {
     if (accelerationMagnitude > shakeThreshold) {
       // Ordena la lista
       if (navigator.vibrate) {
-        navigator.vibrate(2000);
+        navigator.vibrate(500);
       }
       ordenarLista();
     }
