@@ -210,15 +210,17 @@ function handleShake(event) {
 
     const accelerationMagnitude = Math.sqrt(
       accelerationX * accelerationX +
-        accelerationY * accelerationY +
-        accelerationZ * accelerationZ
+      accelerationY * accelerationY +
+      accelerationZ * accelerationZ
     );
 
     const shakeThreshold = 15;
 
     if (accelerationMagnitude > shakeThreshold) {
       // Ordena la lista
-
+      if (navigator.vibrate) {
+        navigator.vibrate(2000);
+      }
       ordenarLista();
     }
   } else {
@@ -272,13 +274,14 @@ function favorite(event) {
     // Crear un nuevo objeto de reconocimiento de voz
     const recognition = new webkitSpeechRecognition();
     console.log("Reconocimiento de voz creado");
-    let interimTranscript ="";
+    let interimTranscript = "";
     // Configurar opciones del reconocimiento
     recognition.continuous = true;
     recognition.interimResults = true;
     recognition.lang = "es-ES"; // Idioma español
     recognition.start();
-    setTimeout(() => {recognition.stop();
+    setTimeout(() => {
+      recognition.stop();
       console.log("Reconocimiento de voz detenido");
     }, 5000);
     // Cuando se detecta un resultado parcial
@@ -290,7 +293,7 @@ function favorite(event) {
           // Verificar si el texto contiene la palabra "añadir"
           if (finalTranscript.toLowerCase().includes("favorito")) {
             console.log("Se ha dicho favorito");
-            
+
             let favimage = event.target;
             console.log("item: ", favimage);
 
@@ -310,15 +313,15 @@ function favorite(event) {
             }
           }
           interimTranscript += finalTranscript;
-      } else {
-        interimTranscript += evento.results[i][0].transcript;
+        } else {
+          interimTranscript += evento.results[i][0].transcript;
+        }
       }
+      console.log("Texto transcripción:", interimTranscript);
     }
-    console.log("Texto transcripción:", interimTranscript);
-        }
-        }
   }
-  
+}
+
 //####################################################################################################################
 //############################################# Fin marcar Favorito ##################################################
 //####################################################################################################################
