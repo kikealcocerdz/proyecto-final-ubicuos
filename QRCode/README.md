@@ -1,6 +1,7 @@
 # Generar y Manejar Código QR
 
 Este bloque de código se encarga de generar un código QR a partir de un valor proporcionado y manejar el evento de escaneo del código QR.
+Dicho código QR  se genera con la ayuda de la biblioteca `qrcode.js`, para más información ver el repositorio de [jeromeetienne](http://jeromeetienne.github.com/jquery-qrcode/).
 
 ## Eventos y Funciones
 

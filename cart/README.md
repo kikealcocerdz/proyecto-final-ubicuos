@@ -35,7 +35,8 @@ Este manejo de eventos también incluye la vibración del dispositivo para propo
 
 ## Agitar para Ordenar
 
-Este bloque de código maneja la funcionalidad para ordenar la lista de productos cuando el dispositivo se agita.
+Este bloque de código maneja la funcionalidad para ordenar la lista de productos cuando el dispositivo se agita y produce una vibración.
+Dicha vibración sólo se activa si previamente se interactua con la pantalla (tocarla), debido a protecciones implementadas en los navegadores.
 
 ### Funciones de Agitar para Ordenar
 
@@ -48,10 +49,13 @@ Este bloque de código maneja la funcionalidad para marcar un producto como favo
 
 ### Funciones
 
-- `favorite(event)`: Esta función se activa cuando se hace clic en la estrella de un producto.
+- `favorite(event)`: Esta función se activa cuando se toca sobre el icono de la estrella de un producto.
 Detecta si el producto ya está marcado como favorito o no, y cambia su estado en consecuencia:
   - Si el producto está marcado como favorito, cambia la imagen de la estrella a una estrella rellena y establece el atributo `alt` en `true`.
   - Si el producto no está marcado como favorito, cambia la imagen de la estrella a una estrella no rellena y establece el atributo `alt` en `false`.
+
+  Para cambiar el estado, es necesario decir `favorito` en voz, habiendo tocado previamente la estrella del producto.
+
 - `DOMContentLoaded`: Este evento se dispara cuando el HTML y los recursos asociados (como imágenes y estilos) han sido completamente cargados y analizados.
 En este contexto, se utiliza para establecer un escuchador de eventos en todos los elementos de la lista de productos para detectar cuándo se hace clic en la estrella.
 - `productsAll.forEach()`: Este método itera sobre todos los elementos de la lista de productos y añade un escuchador de eventos `touchstart` a cada uno.
